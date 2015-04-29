@@ -5,7 +5,10 @@
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/resources"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/messages"/>
         <wb-resource deploy-path="/" source-path="/src/main/webapp"/>
-        <dependent-module archiveName="commonsframework-core-4.0.0-RELEASES.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/commonsframework-core/commonsframework-core">
+        <dependent-module archiveName="commonsframework-base-bean-4.0.0-RELEASES.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/commonsframework-base-bean/commonsframework-base-bean">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="commonsframework-base-utils-4.0.0-RELEASES.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/commonsframework-base-utils/commonsframework-base-utils">
             <dependency-type>uses</dependency-type>
         </dependent-module>
         <dependent-module archiveName="commonsframework-web-4.0.0-RELEASES.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/commonsframework-web/commonsframework-web">

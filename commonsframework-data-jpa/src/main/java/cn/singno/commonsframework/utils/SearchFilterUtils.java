@@ -3,9 +3,8 @@ package cn.singno.commonsframework.utils;
 import java.util.List;
 
 import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.lang3.ClassUtils;
 import org.apache.commons.lang3.StringUtils;
-
-import cn.singno.commonsframework.utils.ClassUtils;
 
 import com.google.common.collect.Lists;
 
@@ -580,7 +579,7 @@ public class SearchFilterUtils
 
 	private static Object getSqlParam(Object param)
 	{
-		if (ClassUtils.isPrimitive(param) || param instanceof String) 
+		if ((null != param && ClassUtils.isPrimitiveOrWrapper(param.getClass())) || param instanceof String) 
 		{
 			if (StringUtils.isBlank(param.toString()))
 			{

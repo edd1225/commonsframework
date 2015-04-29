@@ -1,3 +1,4 @@
+<?xml version="1.0"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
@@ -17,7 +18,7 @@
 		<!-- 其他模块 -->
 		<dependency>
 			<groupId>cn.singno.commonsframework</groupId>
-			<artifactId>commonsframework-core</artifactId>
+			<artifactId>commonsframework-base-utils</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>cn.singno.commonsframework</groupId>
@@ -43,11 +44,28 @@
 		<!-- <dependency> <groupId>javax.el</groupId> <artifactId>javax.el-api</artifactId> 
 			</dependency> <dependency> <groupId>org.glassfish.web</groupId> <artifactId>javax.el</artifactId> 
 			</dependency> -->
+		
+		<!-- spring-core -->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-core</artifactId>
+		</dependency>	 
+		<!-- spring-context-support -->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-context-support</artifactId>
+		</dependency>
+		<!-- spring-context -->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-context</artifactId>
+		</dependency>
 		<!-- spring-webmvc -->
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-webmvc</artifactId>
 		</dependency>
+		
 		<!-- aspectjweaver -->
 		<dependency>
 			<groupId>org.aspectj</groupId>

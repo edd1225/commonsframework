@@ -481,7 +481,25 @@ public class CommonValidator
 	 */
 	public static boolean validate(String checkString, boolean isRequired, int maxLength, String regex)
 	{
-		checkString = StringUtils.trimToEmpty(cn.singno.commonsframework.utils.StringUtils.quanToBan(checkString));
+		// 全角转半角 
+		if (null != checkString)
+		{
+			char c[] = checkString.toCharArray();
+			for (int i = 0; i < c.length; i++)
+			{
+				if (c[i] == '\u3000')
+				{
+					c[i] = ' ';
+				} else if (c[i] > '\uFF00' && c[i] < '\uFF5F')
+				{
+					c[i] = (char) (c[i] - 65248);
+
+				}
+			}
+			checkString = new String(c);
+		}
+		checkString = StringUtils.trimToEmpty(checkString);
+		
 		boolean bool = isRange(checkString, isRequired, maxLength);
 		boolean boolNull = isNull(checkString);
 		if (checkString.indexOf(";") == -1)

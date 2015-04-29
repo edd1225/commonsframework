@@ -7,7 +7,7 @@
 	<version>${commonsframework.version}</version>
 	<packaging>pom</packaging>
 	<url>http://commonsframework.singno.cn</url>
-	<description>整合spring + springMVC + JPA + Hibernate 的�?用web框架</description>
+	<description>整合spring + springMVC + JPA + Hibernate 的�?用web框架</description>
 
 	<properties>
 		<!-- 项目版本 -->
@@ -116,12 +116,16 @@
 		<shiro.version>1.2.2</shiro.version>
 		<!-- freemarker -->
 		<freemarker.version>2.3.19</freemarker.version>
-		<!-- metamorphosis（metaQ�?-->
+		<!-- metamorphosis（metaQ�?-->
 		<metamorphosis-client-extension.version>1.4.3</metamorphosis-client-extension.version>
 	</properties>
 
 	<modules>
-		<module>commonsframework-core</module>
+		<!-- <module>commonsframework-core</module> -->
+		<module>commonsframework-demo</module>
+		<module>commonsframework-base-bean</module>
+    	<module>commonsframework-base-utils</module>
+    	<module>commonsframework-log</module>
 		<module>commonsframework-web</module>
 		<module>commonsframework-validation</module>
 		<module>commonsframework-test</module>
@@ -132,7 +136,6 @@
 		<module>commonsframework-MQ-metaQ</module>
 		<module>commonsframework-security-shiro</module>
 		<module>commonsframework-office</module>
-		<module>commonsframework-base-bean</module>
   </modules>
 
 	<!-- 项目依赖 -->
@@ -193,15 +196,16 @@
 				<artifactId>spring-core</artifactId>
 				<version>${spring.version}</version>
 			</dependency>
+			<!-- spring-context-supportt -->
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-context-support</artifactId>
+				<version>${spring.version}</version>
+			</dependency>
 			<!-- spring-context -->
 			<dependency>
 				<groupId>org.springframework</groupId>
 				<artifactId>spring-context</artifactId>
-				<version>${spring.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.springframework</groupId>
-				<artifactId>spring-context-support</artifactId>
 				<version>${spring.version}</version>
 			</dependency>
 			<!-- spring-beans -->
@@ -568,7 +572,7 @@
 				<artifactId>freemarker</artifactId>
 				<version>${freemarker.version}</version>
 			</dependency>
-			<!-- metamorphosis（metaQ�?-->
+			<!-- metamorphosis（metaQ�?-->
 			<dependency>
 				<groupId>com.taobao.metamorphosis</groupId>
 				<artifactId>metamorphosis-client-extension</artifactId>
@@ -576,9 +580,27 @@
 			</dependency>
 			<!-- commonsframework -->
 			<!-- core -->
-			<dependency>
+			<!-- <dependency>
 				<groupId>cn.singno.commonsframework</groupId>
 				<artifactId>commonsframework-core</artifactId>
+				<version>${commonsframework.version}</version>
+			</dependency> -->
+			<!-- base-bean -->
+			<dependency>
+				<groupId>cn.singno.commonsframework</groupId>
+				<artifactId>commonsframework-base-bean</artifactId>
+				<version>${commonsframework.version}</version>
+			</dependency>
+			<!-- base-utils -->
+			<dependency>
+				<groupId>cn.singno.commonsframework</groupId>
+				<artifactId>commonsframework-base-utils</artifactId>
+				<version>${commonsframework.version}</version>
+			</dependency>
+			<!-- log -->
+			<dependency>
+				<groupId>cn.singno.commonsframework</groupId>
+				<artifactId>commonsframework-log</artifactId>
 				<version>${commonsframework.version}</version>
 			</dependency>
 			<!-- web -->
@@ -639,12 +661,6 @@
 			<dependency>
 				<groupId>cn.singno.commonsframework</groupId>
 				<artifactId>commonsframework-office</artifactId>
-				<version>${commonsframework.version}</version>
-			</dependency>
-			<!-- office -->
-			<dependency>
-				<groupId>cn.singno.commonsframework</groupId>
-				<artifactId>commonsframework-base-bean</artifactId>
 				<version>${commonsframework.version}</version>
 			</dependency>
 		</dependencies>
