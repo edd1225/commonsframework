@@ -12,19 +12,22 @@ import cn.singno.commonsframework.utils.SpringUtils;
 
 public class QuartTestTask extends QuartzJobBean{  
 	
-    private static final String timeFormate = "yyyy-MM-dd mm:hh:ss";
-    
-    @Autowired
+	private static final String timeFormate = "yyyy-MM-dd mm:hh:ss";
+
+	@Autowired
 	private RoleDao roleDao;
-    
-    protected void executeInternal(JobExecutionContext context) throws JobExecutionException {  
-    	
-    	roleDao = SpringUtils.getBean(RoleDao.class);
-    	Role role = new Role();
+
+	protected synchronized void executeInternal(JobExecutionContext context) throws JobExecutionException
+	{
+
+		roleDao = SpringUtils.getBean(RoleDao.class);
+		Role role = new Role();
 		role.setName("admin");
 		role.setDescription("超級管理員");
 		roleDao.save(role);
-    	
-        System.out.println("===================== 执行调度任务（" + DateTime.now().toString(timeFormate) + "） =====================");  
-    }  
+
+		System.out.println("===================== 执行调度任务（"
+				+ DateTime.now().toString(timeFormate)
+				+ "） =====================");
+	}
 }
