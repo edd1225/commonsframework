@@ -3,8 +3,6 @@ package cn.singno.commonsframework.utils;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.junit.Test;
-
 
 /**
  * <p>名称：StringUtils.java</p>

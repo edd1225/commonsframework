@@ -22,7 +22,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 
-import cn.singno.commonsframework.constants.CommonConst;
+import cn.singno.commonsframework.constants.DefaultSystemConst;
 
 /**
  * <p>File：EncryptUtils.java</p>
@@ -38,7 +38,7 @@ public class CryptoUtils
 	private static final Logger logger = Logger.getLogger(CryptoUtils.class);
 
 	// 编码格式
-	private static final String CHARSET 		= 		CommonConst.DEFAULT_UNICODE;
+	private static final String CHARSET 		= 		DefaultSystemConst.DEFAULT_UNICODE;
 
 	// 加密算法常量
 	public class ALGORITHM

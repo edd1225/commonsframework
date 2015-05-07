@@ -27,7 +27,7 @@ import org.dom4j.io.OutputFormat;
 import org.dom4j.io.SAXReader;
 import org.dom4j.io.XMLWriter;
 
-import cn.singno.commonsframework.constants.CommonConst;
+import cn.singno.commonsframework.constants.DefaultSystemConst;
 
 
 /**
@@ -167,7 +167,7 @@ public class XmlUtils
 	public static void write(Document doc, File file) throws IOException
 	{
 		FileOutputStream fos = new FileOutputStream(file);
-		OutputStreamWriter osw = new OutputStreamWriter(fos, CommonConst.DEFAULT_UNICODE);
+		OutputStreamWriter osw = new OutputStreamWriter(fos, DefaultSystemConst.DEFAULT_UNICODE);
 		write(doc, osw);
 	}
 
@@ -182,7 +182,7 @@ public class XmlUtils
 			throws IOException
 	{
 		OutputFormat fo = OutputFormat.createPrettyPrint();
-		fo.setEncoding(CommonConst.DEFAULT_UNICODE); // XML encoding
+		fo.setEncoding(DefaultSystemConst.DEFAULT_UNICODE); // XML encoding
 								// name
 		fo.setIndent(true);
 		fo.setIndent(true);

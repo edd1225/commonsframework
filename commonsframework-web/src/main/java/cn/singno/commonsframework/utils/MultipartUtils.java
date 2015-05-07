@@ -23,7 +23,7 @@ import org.springframework.web.multipart.MultipartFile;
 import cn.singno.commonsframework.bean.FileUploadResult;
 import cn.singno.commonsframework.bean.Multipart;
 import cn.singno.commonsframework.bean.MultipartFiles;
-import cn.singno.commonsframework.constants.CommonEnum;
+import cn.singno.commonsframework.constants.DefaultResultEnum;
 import cn.singno.commonsframework.exception.FileDownloadException;
 import cn.singno.commonsframework.exception.FileUploadException;
 
@@ -243,7 +243,7 @@ public class MultipartUtils {
 	public static ResponseEntity<byte[]> downFile(File file, String fileName){
 		if (null == file)
 		{
-			throw new FileDownloadException(CommonEnum.DOWNLOAD_ERROR, "下载文件不存在");
+			throw new FileDownloadException(DefaultResultEnum.DOWNLOAD_ERROR, "下载文件不存在");
 		}
 		byte[] fileByte = null;
 		try {
@@ -253,7 +253,7 @@ public class MultipartUtils {
 			fileByte = FileUtils.readFileToByteArray(file);
 		}  catch (IOException e) {
 			logger.error(e);
-			throw new FileDownloadException(CommonEnum.DOWNLOAD_ERROR, "下载文件不存在");
+			throw new FileDownloadException(DefaultResultEnum.DOWNLOAD_ERROR, "下载文件不存在");
 		}
 		return downFile(fileByte, fileName);
 	}
@@ -269,7 +269,7 @@ public class MultipartUtils {
 	{
 		if (null == url)
 		{
-			throw new FileDownloadException(CommonEnum.DOWNLOAD_ERROR, "下载文件不存在");
+			throw new FileDownloadException(DefaultResultEnum.DOWNLOAD_ERROR, "下载文件不存在");
 		}
 		byte[] fileByte = null;
 		try {
@@ -279,7 +279,7 @@ public class MultipartUtils {
 			fileByte = IOUtils.toByteArray(url.openStream());
 		}  catch (IOException e) {
 			logger.error(e);
-			throw new FileDownloadException(CommonEnum.DOWNLOAD_ERROR, "下载文件不存在");
+			throw new FileDownloadException(DefaultResultEnum.DOWNLOAD_ERROR, "下载文件不存在");
 		}
 		return downFile(fileByte, fileName);
 	}
@@ -290,7 +290,7 @@ public class MultipartUtils {
 	{
 		if (null==file || file.isEmpty())
 		{
-			throw new FileUploadException(CommonEnum.UPLOAD_ERROR, "上传文件不能为空");
+			throw new FileUploadException(DefaultResultEnum.UPLOAD_ERROR, "上传文件不能为空");
 		}
 		
 		// 1. 验证后缀
@@ -316,7 +316,7 @@ public class MultipartUtils {
 		} catch (Exception e)
 		{
 			logger.error(e);
-			throw new FileUploadException(CommonEnum.UPLOAD_ERROR, "文件保存失败");
+			throw new FileUploadException(DefaultResultEnum.UPLOAD_ERROR, "文件保存失败");
 		}
 		return new FileUploadResult(multipart, fileType);
 	}
@@ -325,7 +325,7 @@ public class MultipartUtils {
 	{
 		if (null == files)
 		{
-			throw new FileUploadException(CommonEnum.UPLOAD_ERROR, "上传文件不能为空");
+			throw new FileUploadException(DefaultResultEnum.UPLOAD_ERROR, "上传文件不能为空");
 		}
 		List<FileUploadResult> uploadResult = Lists.newArrayList();
 		for (MultipartFile file : files.getFiles())
@@ -377,7 +377,7 @@ public class MultipartUtils {
 				return fileType;
 			}
 		}
-		throw new FileUploadException(CommonEnum.UPLOAD_ERROR, "文件类型不支持");
+		throw new FileUploadException(DefaultResultEnum.UPLOAD_ERROR, "文件类型不支持");
 	}
 	
 	/**
@@ -393,7 +393,7 @@ public class MultipartUtils {
 		String fileSuffix = FilenameUtils.getExtension(fileName);
 		if (!validSuffix(fileSuffix, fileType))
 		{
-			throw new FileUploadException(CommonEnum.UPLOAD_ERROR, "文件类型不支持");
+			throw new FileUploadException(DefaultResultEnum.UPLOAD_ERROR, "文件类型不支持");
 		}
 	}
 	
@@ -424,7 +424,7 @@ public class MultipartUtils {
 		Set<String> contentTypeSet = fileType.getContentTypeSet();
 		if (!contentTypeSet.contains(contentType))
 		{
-			throw new FileUploadException(CommonEnum.UPLOAD_ERROR, "文件类型不支持");
+			throw new FileUploadException(DefaultResultEnum.UPLOAD_ERROR, "文件类型不支持");
 		}
 	}
 	
@@ -448,7 +448,7 @@ public class MultipartUtils {
 		{
 			if (!parentFile.mkdirs())
 			{
-				throw new FileUploadException(CommonEnum.UPLOAD_ERROR, "文件保存目录创建失败");
+				throw new FileUploadException(DefaultResultEnum.UPLOAD_ERROR, "文件保存目录创建失败");
 			}
 		}
 		return saveFile;

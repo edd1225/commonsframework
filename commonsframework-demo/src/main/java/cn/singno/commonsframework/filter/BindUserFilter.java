@@ -25,7 +25,6 @@ public class BindUserFilter extends PathMatchingFilter {
 
     @Override
     protected boolean onPreHandle(ServletRequest request, ServletResponse response, Object mappedValue) throws Exception {
-
         String username = (String)SecurityUtils.getSubject().getPrincipal();
         request.setAttribute(ApplicationConst.CURRENT_USER, userService.findByUserName(username));
         return true;

@@ -7,7 +7,7 @@
  */
 package cn.singno.commonsframework.exception;
 
-import cn.singno.commonsframework.constants.DescribableEnum;
+import cn.singno.commonsframework.constants.DescribableInfo;
 
 /**
  * <p>名称：DescribableException.java</p>
@@ -22,7 +22,9 @@ import cn.singno.commonsframework.constants.DescribableEnum;
 @SuppressWarnings("all")
 public abstract class DescribableException extends RuntimeException {
 
-	private DescribableEnum exceptionDescribable;// 异常描述
+	private Number code;// 编码
+	
+	private String Info;// 信息
 
 	private String errorDetails;// 异常详细信息
 
@@ -33,9 +35,10 @@ public abstract class DescribableException extends RuntimeException {
 	 * 
 	 * @param exceptionDescribable
 	 */
-	public DescribableException(DescribableEnum exceptionDescribable) {
+	public DescribableException(DescribableInfo describableInfo) {
 		super();
-		this.exceptionDescribable = exceptionDescribable;
+		this.code = describableInfo.getCode();
+		this.Info = describableInfo.getInfo();
 	}
 
 	/**
@@ -46,30 +49,40 @@ public abstract class DescribableException extends RuntimeException {
 	 * @param exceptionDescribable
 	 * @param errorDetails
 	 */
-	public DescribableException(DescribableEnum exceptionDescribable,
-			String errorDetails) {
+	public DescribableException(DescribableInfo describableInfo, String errorDetails) {
 		super();
-		this.exceptionDescribable = exceptionDescribable;
+		this.code = describableInfo.getCode();
+		this.Info = describableInfo.getInfo();
 		this.errorDetails = errorDetails;
 	}
 
-	public DescribableEnum getExceptionDescribable() {
-		return exceptionDescribable;
+	public Number getCode()
+	{
+		return code;
 	}
 
-	public String getMessage() {
-		return this.exceptionDescribable.getMessage();
+	public void setCode(Number code)
+	{
+		this.code = code;
 	}
 
-	public Integer getCode() {
-		return this.exceptionDescribable.getCode().intValue();
+	public String getInfo()
+	{
+		return Info;
 	}
 
-	public String getErrorDetails() {
+	public void setInfo(String info)
+	{
+		Info = info;
+	}
+
+	public String getErrorDetails()
+	{
 		return errorDetails;
 	}
 
-	public void setErrorDetails(String errorDetails) {
+	public void setErrorDetails(String errorDetails)
+	{
 		this.errorDetails = errorDetails;
 	}
 }

@@ -123,6 +123,7 @@
 	<modules>
 		<!-- <module>commonsframework-core</module> -->
 		<module>commonsframework-demo</module>
+		<module>commonsframework-demo2</module>
 		<module>commonsframework-base-bean</module>
     	<module>commonsframework-base-utils</module>
     	<module>commonsframework-log</module>
@@ -147,8 +148,7 @@
 				<artifactId>javax.servlet-api</artifactId>
 				<version>${javax.servlet-api.version}</version>
 			</dependency>
-			<!-- <dependency> <groupId>javax.servlet</groupId> <artifactId>servlet-api</artifactId> 
-				<version>2.5</version> </dependency> -->
+			<!-- javax.servlet.jsp-api -->
 			<dependency>
 				<groupId>javax.servlet.jsp</groupId>
 				<artifactId>javax.servlet.jsp-api</artifactId>

@@ -18,7 +18,7 @@ import org.springframework.web.context.ContextLoader;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.util.WebUtils;
 
-import cn.singno.commonsframework.constants.CommonConst;
+import cn.singno.commonsframework.constants.DefaultSystemConst;
 
 /**
  * <p>File：SpringUtils.java</p>
@@ -53,14 +53,14 @@ public class SpringUtils implements ApplicationContextAware, DisposableBean
      */
     public static String getRootPath()
     {
-        String path = CommonConst.SYS_SEPARATOR;
+        String path = DefaultSystemConst.SYS_SEPARATOR;
         try
         {
         	WebApplicationContext webApplicationContext = ContextLoader.getCurrentWebApplicationContext();    
             if (null != webApplicationContext)
 			{
             	ServletContext servletContext = webApplicationContext.getServletContext();
-            	path = WebUtils.getRealPath(servletContext, CommonConst.SYS_SEPARATOR);
+            	path = WebUtils.getRealPath(servletContext, DefaultSystemConst.SYS_SEPARATOR);
 			}
         }
         catch (FileNotFoundException e)

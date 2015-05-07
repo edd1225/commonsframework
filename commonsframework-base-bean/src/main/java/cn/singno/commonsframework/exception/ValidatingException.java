@@ -1,6 +1,7 @@
 package cn.singno.commonsframework.exception;
 
-import cn.singno.commonsframework.constants.DescribableEnum;
+import cn.singno.commonsframework.constants.DescribableInfo;
+
 
 /**
  * <p>名称：ValidatingException.java</p>
@@ -15,11 +16,11 @@ import cn.singno.commonsframework.constants.DescribableEnum;
 @SuppressWarnings("serial")
 public class ValidatingException extends DescribableException{
 
-	public ValidatingException(DescribableEnum exceptionDescribable) {
-		super(exceptionDescribable);
+	public ValidatingException(DescribableInfo describableInfo) {
+		super(describableInfo);
 	}
 	
-	public ValidatingException(DescribableEnum exceptionDescribable, String errorDetails) {
-		super(exceptionDescribable, errorDetails);
+	public ValidatingException(DescribableInfo describableInfo, String errorDetails) {
+		super(describableInfo, errorDetails);
 	}
 }

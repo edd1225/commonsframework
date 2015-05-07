@@ -5,44 +5,44 @@ import java.util.List;
 
 import org.springframework.data.domain.Page;
 
-import cn.singno.commonsframework.constants.DescribableEnum;
+import cn.singno.commonsframework.constants.DescribableInfo;
 
 /**
- * <p>名称：JsonResult.java</p>
- * <p>描述：json结果对象</p>
+ * <p>名称：ResultBean.java</p>
+ * <p>描述：结果对象</p>
  * <pre>
- *    分装json格式的数据对象，供ajax请求返回数据的封装
+ *    封装结果对象
  * </pre>
  * @author 周光暖
  * @date 2015-3-30 下午9:38:30
  * @version 1.0.0
  */
 @SuppressWarnings("all")
-public class JsonResult<T> implements Serializable {
+public class ResultBean<T> implements Serializable {
 	
-	public JsonResult() {
+	public ResultBean() {
 	}
 
-	public JsonResult(Object code, String message) {
+	public ResultBean(Object code, String info) {
 		this.code = code;
-		this.message = message;
+		this.info = info;
 	}
 	
-	public JsonResult(DescribableEnum enumDescribable) {
-		this.code = enumDescribable.getCode();
-		this.message = enumDescribable.getMessage();
+	public ResultBean(DescribableInfo describableInfo) {
+		this.code = describableInfo.getCode();
+		this.info = describableInfo.getInfo();
 	}
 	
-	public JsonResult(DescribableEnum enumDescribable, Object object) {
-		this.code = enumDescribable.getCode();
-		this.message = enumDescribable.getMessage();
+	public ResultBean(DescribableInfo describableInfo, Object object) {
+		this.code = describableInfo.getCode();
+		this.info = describableInfo.getInfo();
 		this.object = object;
 	}
 	
-	public JsonResult(DescribableEnum enumDescribable, Page<T> pageResult) 
+	public ResultBean(DescribableInfo describableInfo, Page<T> pageResult) 
 	{
-		this.code = enumDescribable.getCode();
-		this.message = enumDescribable.getMessage();
+		this.code = describableInfo.getCode();
+		this.info = describableInfo.getInfo();
 		if (null != pageResult)
 		{
 			this.isPageResult = true;
@@ -59,10 +59,10 @@ public class JsonResult<T> implements Serializable {
 		}
 	}
 	
-	public JsonResult(DescribableEnum enumDescribable, Page<T> pageResult, Object object) 
+	public ResultBean(DescribableInfo describableInfo, Page<T> pageResult, Object object) 
 	{
-		this.code = enumDescribable.getCode();
-		this.message = enumDescribable.getMessage();
+		this.code = describableInfo.getCode();
+		this.info = describableInfo.getInfo();
 		if (null != pageResult)
 		{
 			this.isPageResult = true;
@@ -82,11 +82,11 @@ public class JsonResult<T> implements Serializable {
 	
 	private Object code;// 状态码
 
-	private String message;// 状态描述信息
+	private String info;// 状态描述信息
 
 	private Object object;// 提供内容封装
 	
-	private Boolean isPageResult = false;// 是否是分页请求结果
+	private Boolean isPageResult;// 是否是分页请求结果
 
 	// 分页查询结果相关信息====================================================
 	private List<?> rows;// 分页列表内容
@@ -120,14 +120,14 @@ public class JsonResult<T> implements Serializable {
 		this.code = code;
 	}
 
-	public String getMessage()
+	public String getInfo()
 	{
-		return message;
+		return info;
 	}
 
-	public void setMessage(String message)
+	public void setInfo(String info)
 	{
-		this.message = message;
+		this.info = info;
 	}
 
 	public Object getObject()
@@ -138,6 +138,16 @@ public class JsonResult<T> implements Serializable {
 	public void setObject(Object object)
 	{
 		this.object = object;
+	}
+
+	public Boolean getIsPageResult()
+	{
+		return null==this.isPageResult ? false : this.isPageResult;
+	}
+
+	public void setIsPageResult(Boolean isPageResult)
+	{
+		this.isPageResult = isPageResult;
 	}
 
 	public List<?> getRows()
@@ -238,15 +248,5 @@ public class JsonResult<T> implements Serializable {
 	public void setIsLastPage(Boolean isLastPage)
 	{
 		this.isLastPage = isLastPage;
-	}
-
-	public Boolean getIsPageResult()
-	{
-		return isPageResult;
-	}
-
-	public void setIsPageResult(Boolean isPageResult)
-	{
-		this.isPageResult = isPageResult;
 	}
 }

@@ -20,7 +20,7 @@ import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.ArrayUtils;
 import org.hibernate.validator.HibernateValidator;
 
-import cn.singno.commonsframework.constants.CommonEnum;
+import cn.singno.commonsframework.constants.DefaultResultEnum;
 import cn.singno.commonsframework.exception.DescribableException;
 import cn.singno.commonsframework.exception.ValidatingException;
 
@@ -85,7 +85,7 @@ public class ValidateUtils
 		List<String> messageList = getMessageListBySet(constraintViolations, hidAttribute);
 		if (CollectionUtils.isNotEmpty(messageList))
 		{
-			throw new ValidatingException(CommonEnum.PARAMES_ERROR, ArrayUtils.toString(messageList));
+			throw new ValidatingException(DefaultResultEnum.PARAMES_ERROR, ArrayUtils.toString(messageList));
 		}
 	}
 	
@@ -171,7 +171,7 @@ public class ValidateUtils
 		List<String> messageList = getMessageListBySet(constraintViolations, hidAttribute);
 		if (CollectionUtils.isNotEmpty(messageList))
 		{
-			throw new ValidatingException(CommonEnum.PARAMES_ERROR, ArrayUtils.toString(messageList));
+			throw new ValidatingException(DefaultResultEnum.PARAMES_ERROR, ArrayUtils.toString(messageList));
 		}
 	}
 	
@@ -223,7 +223,7 @@ public class ValidateUtils
 		List<String> messageList = getMessageListBySet(constraintViolations, hidAttribute);
 		if (CollectionUtils.isNotEmpty(messageList))
 		{
-			throw new ValidatingException(CommonEnum.PARAMES_ERROR, ArrayUtils.toString(messageList));
+			throw new ValidatingException(DefaultResultEnum.PARAMES_ERROR, ArrayUtils.toString(messageList));
 		}
 	}
 	

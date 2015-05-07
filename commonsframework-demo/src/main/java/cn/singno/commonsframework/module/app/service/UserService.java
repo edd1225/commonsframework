@@ -4,14 +4,15 @@ import java.util.Set;
 
 import javax.validation.Valid;
 
-import org.springframework.validation.annotation.Validated;
+import org.hibernate.validator.constraints.NotBlank;
 
 import cn.singno.commonsframework.module.app.entity.User;
 
-@Validated
 public interface UserService
 {
 	public User save(@Valid User user);
+	
+	public User update(@NotBlank(message="用户名不能为空") String refrenceId);
 
 	public User findByUserName(String userName);
 

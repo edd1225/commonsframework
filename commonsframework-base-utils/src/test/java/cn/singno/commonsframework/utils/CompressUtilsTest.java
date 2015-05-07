@@ -7,11 +7,6 @@
  */
 package cn.singno.commonsframework.utils;
 
-import java.io.File;
-
-import org.junit.Test;
-
-import cn.singno.commonsframework.constants.CommonEnum;
 
 /**<p>名称：CompressUtilsTest.java</p>
  * <p>描述：</p>

@@ -2,10 +2,13 @@ package cn.singno.commonsframework.module.app.service.impl;
 
 import java.util.Set;
 
+import javax.validation.Valid;
+
 import org.apache.log4j.Logger;
 import org.hibernate.validator.constraints.NotBlank;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.annotation.Validated;
 
 import com.google.common.collect.Sets;
 
@@ -14,6 +17,7 @@ import cn.singno.commonsframework.module.app.entity.User;
 import cn.singno.commonsframework.module.app.service.UserService;
 import cn.singno.commonsframework.security.bean.PasswordHelper;
 
+@Validated
 @Service
 public class UserServiceImpl implements UserService
 {

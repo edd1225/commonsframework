@@ -5,9 +5,7 @@
  */
 package cn.singno.commonsframework.exception;
 
-import java.io.Serializable;
-
-import cn.singno.commonsframework.constants.DescribableEnum;
+import cn.singno.commonsframework.constants.DescribableInfo;
 
 /**
  * <p>File：FileUploadException.java</p>
@@ -21,11 +19,11 @@ import cn.singno.commonsframework.constants.DescribableEnum;
 @SuppressWarnings("all")
 public class FileUploadException extends DescribableException
 {
-	public FileUploadException(DescribableEnum exceptionDescribable) {
-		super(exceptionDescribable);
+	public FileUploadException(DescribableInfo describableInfo) {
+		super(describableInfo);
 	}
 	
-	public FileUploadException(DescribableEnum exceptionDescribable, String errorDetails) {
-		super(exceptionDescribable, errorDetails);
+	public FileUploadException(DescribableInfo describableInfo, String errorDetails) {
+		super(describableInfo, errorDetails);
 	}
 }

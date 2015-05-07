@@ -1,5 +1,7 @@
 package cn.singno.commonsframework.module.app.controller;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.apache.shiro.session.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -15,7 +17,10 @@ public class IndexController {
 	private SessionHelper sessionHelper;
 	
 	@RequestMapping(value = "/index", method = RequestMethod.GET)
-	public String index(){ 
+	public String index(HttpServletRequest request){ 
+		
+		System.out.println(request.getHeader("Referer"));
+		
 		
 //		Subject subject = SecurityUtils.getSubject();
 //	        Session sessionOnline = sessionDAO.readSession(subject.getSession().getId());

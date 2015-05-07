@@ -15,9 +15,8 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import cn.singno.commonsframework.bean.ClientParameter;
-import cn.singno.commonsframework.constants.CommonConst;
-import cn.singno.commonsframework.constants.CommonEnum;
-import cn.singno.commonsframework.constants.DescribableEnum;
+import cn.singno.commonsframework.constants.DefaultResultEnum;
+import cn.singno.commonsframework.constants.DefaultSystemConst;
 import cn.singno.commonsframework.exception.BusinessException;
 
 import com.alibaba.fastjson.JSON;
@@ -66,13 +65,13 @@ public class ParameterUtils
 				|| StringUtils.isBlank(userKey)
 				|| dataLen == null)
 		{
-			throw new BusinessException(CommonEnum.NUL_ERROR);
+			throw new BusinessException(DefaultResultEnum.NUL_ERROR);
 		}
 		// 数据长度校验
 		int len = CommonValidator.length(data);
 		if (dataLen.intValue() != len)
 		{
-			throw new BusinessException(CommonEnum.LEN_ERROR);
+			throw new BusinessException(DefaultResultEnum.LEN_ERROR);
 		}
 		// 异或校验码校验
 		userDes = StringUtils.trimToEmpty(userDes);
@@ -80,19 +79,19 @@ public class ParameterUtils
 		String encrypt = getUserDes(userKey, dataLen);
 		if (!userDes.equalsIgnoreCase(encrypt))
 		{
-			throw new BusinessException(CommonEnum.DES_ERROR);
+			throw new BusinessException(DefaultResultEnum.DES_ERROR);
 		}
 		// userkey 校验
-		if (!userKey.equals(CommonConst.USER_KEY))
+		if (!userKey.equals(DefaultSystemConst.USER_KEY))
 		{
-			throw new BusinessException(CommonEnum.KEY_ERROR);
+			throw new BusinessException(DefaultResultEnum.KEY_ERROR);
 		}
 		// data 参数里是否包含emoji表情
 		for (int i = 0; i < dataLen; i++)
 		{
 			if (!NotEmojiCharacter(data.charAt(i)))
 			{
-				throw new BusinessException(CommonEnum.EXISTS_EMOJI);
+				throw new BusinessException(DefaultResultEnum.EXISTS_EMOJI);
 			}
 		}
 	}
@@ -190,7 +189,7 @@ public class ParameterUtils
 		{
 			StringBuffer stringBuffer = new StringBuffer(userKey);
 			stringBuffer.append(Integer.toString(dataLen));
-			result = EncodeUtils.getXorString(stringBuffer.toString(), CommonConst.DEFAULT_UNICODE);
+			result = EncodeUtils.getXorString(stringBuffer.toString(), DefaultSystemConst.DEFAULT_UNICODE);
 		}
 		return result;
 	}
@@ -243,7 +242,7 @@ public class ParameterUtils
 	{
 		// String data = "userId:01A18EF53D8F4EC28AAE8A7A04D0448A";
 		String data = "😄userId:5DA7D8C073744860925636A88B163063,wshopId:094E840EF9AD4C33AA92A6ADE1C42168";
-		String userKey = CommonConst.USER_KEY;
+		String userKey = DefaultSystemConst.USER_KEY;
 		// String data =
 		// "msgCate:1,userId:E09690D18E8240F28A157C9FE82ED8D4,msgText:测试测试测试,msgReciver:13967849277,userPassword:smsuserzttx12345678,userName:\u79FB\u52A8\u670D\u52A1\u5E73\u53F0";
 		// String data = "userAccount:13058555555";

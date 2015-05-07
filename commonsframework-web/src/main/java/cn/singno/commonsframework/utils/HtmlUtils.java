@@ -13,7 +13,7 @@ import org.htmlparser.util.ParserException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import cn.singno.commonsframework.constants.CommonConst;
+import cn.singno.commonsframework.constants.DefaultSystemConst;
 
 
 /**
@@ -218,7 +218,7 @@ public class HtmlUtils
     {
         Parser myParser = new Parser(url);
         // 设置编码
-        myParser.setEncoding(CommonConst.DEFAULT_UNICODE);
+        myParser.setEncoding(DefaultSystemConst.DEFAULT_UNICODE);
         String titleTag = "title";
         NodeFilter titleFilter = new TagNameFilter(titleTag);
         NodeList titleList = myParser.extractAllNodesThatMatch(titleFilter);

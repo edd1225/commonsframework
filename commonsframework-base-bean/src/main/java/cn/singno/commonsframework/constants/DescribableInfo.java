@@ -8,27 +8,27 @@
 package cn.singno.commonsframework.constants;
 
 /**<p>名称：DescribableExceptionConstants.java</p>
- * <p>描述：</p>
+ * <p>描述：可描述信息</p>
  * <pre>
- *    可描述的错误常量接口     
+ *  	
  * </pre>
  * @author 周光暖
  * @date 2014年7月24日 下午3:19:12
  * @version 1.0.0
  */
-public interface DescribableEnum
+public interface DescribableInfo
 { 
 	/**
 	 * 描述：  
-	 * <pre>状态代码</pre>
+	 * <pre>编码</pre>
 	 * @return
 	 */
 	Number getCode();
 	
 	/**
 	 * 描述：
-	 * <pre>状态描述信息</pre>
+	 * <pre>信息</pre>
 	 * @return
 	 */
-	String getMessage();
+	String getInfo();
 }

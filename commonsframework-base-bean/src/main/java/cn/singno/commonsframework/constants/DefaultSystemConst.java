@@ -1,8 +1,24 @@
+/**
+ * <p>项目名：</p>
+ * <p>包名：cn.singno.commonsframework.constants</p>
+ * <p>文件名：DefaultSystemConst.java</p>
+ * <p>版本信息：</p>
+ * <p>日期：2015-5-7-下午3:57:16</p>
+ * Copyright (c) 2015singno公司-版权所有
+ */
 package cn.singno.commonsframework.constants;
 
-
-
-public class CommonConst {
+/**
+ * <p>名称：DefaultSystemConst.java</p>
+ * <p>描述：默认系统常量</p>
+ * <pre>
+ *    
+ * </pre>
+ * @author 周光暖
+ * @date 2015-5-7 下午3:57:16
+ * @version 1.0.0
+ */
+public class DefaultSystemConst {
 	
 	// 默认分页设置
 	public static final Integer DEFAULT_CURRENT_PAGE = 1;

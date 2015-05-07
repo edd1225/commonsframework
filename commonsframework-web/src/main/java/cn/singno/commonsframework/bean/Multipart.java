@@ -8,7 +8,7 @@ import org.joda.time.DateTime;
 import org.springframework.util.Assert;
 import org.springframework.web.multipart.MultipartFile;
 
-import cn.singno.commonsframework.constants.CommonConst;
+import cn.singno.commonsframework.constants.DefaultSystemConst;
 import cn.singno.commonsframework.utils.SerialUtils;
 import cn.singno.commonsframework.utils.SpringUtils;
 import cn.singno.commonsframework.utils.MultipartUtils.FileType;
@@ -66,11 +66,11 @@ public class Multipart {
 	private String buildFileRelativePath(MultipartFile file, FileType fileType)
 	{
 		DateTime now = DateTime.now();
-		StringBuffer sb = new StringBuffer(CommonConst.SYS_SEPARATOR)
-			.append("upload").append(CommonConst.SYS_SEPARATOR)
-			.append(fileType.toString()).append(CommonConst.SYS_SEPARATOR)
-			.append(now.toString("yyyy")).append(CommonConst.SYS_SEPARATOR)
-			.append(now.toString("yyyyMMdd")).append(CommonConst.SYS_SEPARATOR)
+		StringBuffer sb = new StringBuffer(DefaultSystemConst.SYS_SEPARATOR)
+			.append("upload").append(DefaultSystemConst.SYS_SEPARATOR)
+			.append(fileType.toString()).append(DefaultSystemConst.SYS_SEPARATOR)
+			.append(now.toString("yyyy")).append(DefaultSystemConst.SYS_SEPARATOR)
+			.append(now.toString("yyyyMMdd")).append(DefaultSystemConst.SYS_SEPARATOR)
 			.append(this.newFileName);
 		return sb.toString();
 	}

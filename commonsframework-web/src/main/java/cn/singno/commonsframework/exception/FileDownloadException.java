@@ -5,9 +5,8 @@
  */
 package cn.singno.commonsframework.exception;
 
-import java.io.Serializable;
+import cn.singno.commonsframework.constants.DescribableInfo;
 
-import cn.singno.commonsframework.constants.DescribableEnum;
 
 /**
  * <p>File：FileDownloadException.java</p>
@@ -21,11 +20,11 @@ import cn.singno.commonsframework.constants.DescribableEnum;
 @SuppressWarnings("all")
 public class FileDownloadException extends DescribableException
 {
-	public FileDownloadException(DescribableEnum exceptionDescribable) {
-		super(exceptionDescribable);
+	public FileDownloadException(DescribableInfo describableInfo) {
+		super(describableInfo);
 	}
 	
-	public FileDownloadException(DescribableEnum exceptionDescribable, String errorDetails) {
-		super(exceptionDescribable, errorDetails);
+	public FileDownloadException(DescribableInfo describableInfo, String errorDetails) {
+		super(describableInfo, errorDetails);
 	}
 }

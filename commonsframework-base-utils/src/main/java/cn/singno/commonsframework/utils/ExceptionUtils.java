@@ -51,7 +51,7 @@ public class ExceptionUtils {
 	public static String promptInfo(DescribableException e, boolean hidCode) {
 		StringBuffer promptInfo = new StringBuffer();
 		if (!hidCode) {
-			promptInfo.append(e.getExceptionDescribable().getCode() + SEPARATOR);
+			promptInfo.append(e.getCode() + SEPARATOR);
 		}
 		promptInfo.append(StringEscapeUtils.escapeHtml4(e.getMessage()));
 		String errorDetails = StringEscapeUtils.escapeHtml4(e.getErrorDetails());

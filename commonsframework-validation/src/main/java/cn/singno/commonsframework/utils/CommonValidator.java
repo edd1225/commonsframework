@@ -8,7 +8,7 @@ import org.apache.commons.validator.GenericTypeValidator;
 import org.apache.commons.validator.routines.CalendarValidator;
 import org.apache.oro.text.perl.Perl5Util;
 
-import cn.singno.commonsframework.constants.CommonConst;
+import cn.singno.commonsframework.constants.DefaultSystemConst;
 
 /**
  * <p>File：ValidateUtils2.java</p>
@@ -294,11 +294,11 @@ public class CommonValidator
 			{
 				return false;
 			}
-			if (dateFormat.equalsIgnoreCase(CommonConst.DATE_FORMAT_YM))
+			if (dateFormat.equalsIgnoreCase(DefaultSystemConst.DATE_FORMAT_YM))
 			{
 				return matchRegexp(checkString, "^([0-9]{4}-[0-9]{1,2})?$");
 			}
-			if (dateFormat.equalsIgnoreCase(CommonConst.DATE_FORMAT_YMD))
+			if (dateFormat.equalsIgnoreCase(DefaultSystemConst.DATE_FORMAT_YMD))
 			{
 				return matchRegexp(checkString, "^([0-9]{4}-[0-9]{1,2}-[0-9]{1,2})?$");
 			}

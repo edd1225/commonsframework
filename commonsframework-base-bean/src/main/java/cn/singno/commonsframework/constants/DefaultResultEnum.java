@@ -8,8 +8,8 @@
 package cn.singno.commonsframework.constants;
 
 
-/**<p>名称：CommonsErrorConst.java</p>
- * <p>描述：通用错误常量</p>
+/**<p>名称：DefaultResultEnum.java</p>
+ * <p>描述：默认结果枚举</p>
  * <pre>
  *         
  * </pre>
@@ -17,7 +17,7 @@ package cn.singno.commonsframework.constants;
  * @date 2014年7月24日 下午3:25:27
  * @version 1.0.0
  */
-public enum CommonEnum implements DescribableEnum
+public enum DefaultResultEnum implements DescribableInfo
 {
 	// 120000-129999
 	SUCCESS(120000, "成功"),
@@ -34,13 +34,13 @@ public enum CommonEnum implements DescribableEnum
 	EXISTS_EMOJI(120011,"输入的内容里存在系统不支持的字符")
 	;
 	
-	private Integer code;
-	private String message;
+	private Integer code;// 结果编码
+	private String info;// 结果信息
 
-	private CommonEnum(Integer code, String message)
+	private DefaultResultEnum(Integer code, String info)
 	{
 		this.code = code;
-		this.message = message;
+		this.info = info;
 	}
 	
 	public Integer getCode()
@@ -48,8 +48,8 @@ public enum CommonEnum implements DescribableEnum
 		return this.code;
 	}
 
-	public String getMessage()
+	public String getInfo()
 	{
-		return this.message;
+		return this.info;
 	}
 }

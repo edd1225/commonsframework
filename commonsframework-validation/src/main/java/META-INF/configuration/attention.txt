@@ -1,0 +1,33 @@
+1. 注释的位置
+@Validated
+跟@Service一起注释在ServiceImpl类
+
+@Valid 
+注释在Service类
+
+否则无效
+
+2. 测试时，Service测试无效，Controlle测试有效
+
+// 无效
+@Test
+public void testSave()
+{
+	try
+	{
+		User user = null;//usernew User();
+		userService.save(user);
+	} catch (Exception e)
+	{
+		e.printStackTrace();
+	}
+};
+
+// 有效
+@Test
+	public void testVerification2() throws Exception
+	{
+		Map<String, Object> params = Maps.newHashMap();
+		ResultActions resultActions = super.getResultActionsByPost("/test/2", params);
+		logger.debug(resultActions.andReturn().getResponse().getContentAsString());
+	}

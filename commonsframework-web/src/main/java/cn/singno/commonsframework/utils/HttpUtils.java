@@ -43,7 +43,7 @@ import org.apache.http.util.EntityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import cn.singno.commonsframework.constants.CommonConst;
+import cn.singno.commonsframework.constants.DefaultSystemConst;
 
 /**
  * <p>File：HttpUtils.java</p>
@@ -106,7 +106,7 @@ public class HttpUtils
                                                                        HttpEntity entity = response.getEntity();
                                                                        if (entity != null)
                                                                        {
-                                                                           String charset = EntityUtils.getContentCharSet(entity) == null ? CommonConst.DEFAULT_UNICODE : EntityUtils
+                                                                           String charset = EntityUtils.getContentCharSet(entity) == null ? DefaultSystemConst.DEFAULT_UNICODE : EntityUtils
                                                                                    .getContentCharSet(entity);
                                                                            return new String(EntityUtils.toByteArray(entity), charset);
                                                                        }
@@ -287,7 +287,7 @@ public class HttpUtils
         {
             if (StringUtils.isBlank(charsetName))
             {
-                charsetName = CommonConst.DEFAULT_UNICODE;
+                charsetName = DefaultSystemConst.DEFAULT_UNICODE;
             }
             entity = new UrlEncodedFormEntity(paramList, charsetName);
         }
@@ -323,7 +323,7 @@ public class HttpUtils
         {
             String url = MessageFormat.format(MOBILE_URL, mobile);
             logger.info("从以下地址获取手机号所在地区：{}", url);
-            String html = get(url, CommonConst.DEFAULT_UNICODE);
+            String html = get(url, DefaultSystemConst.DEFAULT_UNICODE);
             String[] strings = HtmlUtils.getTextByTagName(html, "td", "class", "tdc2", "gb2312");
             if (null != strings && strings.length >= 2)
             {
@@ -349,7 +349,7 @@ public class HttpUtils
          // 模拟浏览器，解决一些服务器程序只允许浏览器访问的问题
          httpclient.getParams().setParameter(CoreProtocolPNames.USER_AGENT, "Mozilla/5.0 (Windows; U; Windows NT 5.1; zh-CN; rv:1.9.2.13) Gecko/20101203 Firefox/3.6.13");
          httpclient.getParams().setParameter(CoreProtocolPNames.USE_EXPECT_CONTINUE, Boolean.FALSE);
-         httpclient.getParams().setParameter(CoreProtocolPNames.HTTP_CONTENT_CHARSET, charset == null ? CommonConst.DEFAULT_CURRENT_PAGE : charset);
+         httpclient.getParams().setParameter(CoreProtocolPNames.HTTP_CONTENT_CHARSET, charset == null ? DefaultSystemConst.DEFAULT_CURRENT_PAGE : charset);
          httpclient.setHttpRequestRetryHandler(requestRetryHandler);
          return httpclient;
      }
