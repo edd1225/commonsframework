@@ -5,13 +5,13 @@ import java.util.List;
 
 import org.springframework.data.domain.Page;
 
-import cn.singno.commonsframework.constants.DescribableInfo;
+import cn.singno.commonsframework.constants.Describable;
 
 /**
  * <p>名称：ResultBean.java</p>
  * <p>描述：结果对象</p>
  * <pre>
- *    封装结果对象
+ *    封装Http请求处理返回的结果对象
  * </pre>
  * @author 周光暖
  * @date 2015-3-30 下午9:38:30
@@ -25,24 +25,24 @@ public class ResultBean<T> implements Serializable {
 
 	public ResultBean(Object code, String info) {
 		this.code = code;
-		this.info = info;
+		this.message = message;
 	}
 	
-	public ResultBean(DescribableInfo describableInfo) {
+	public ResultBean(Describable describableInfo) {
 		this.code = describableInfo.getCode();
-		this.info = describableInfo.getInfo();
+		this.message = describableInfo.getMessage();
 	}
 	
-	public ResultBean(DescribableInfo describableInfo, Object object) {
+	public ResultBean(Describable describableInfo, Object object) {
 		this.code = describableInfo.getCode();
-		this.info = describableInfo.getInfo();
+		this.message = describableInfo.getMessage();
 		this.object = object;
 	}
 	
-	public ResultBean(DescribableInfo describableInfo, Page<T> pageResult) 
+	public ResultBean(Describable describableInfo, Page<T> pageResult) 
 	{
 		this.code = describableInfo.getCode();
-		this.info = describableInfo.getInfo();
+		this.message = describableInfo.getMessage();
 		if (null != pageResult)
 		{
 			this.isPageResult = true;
@@ -59,10 +59,10 @@ public class ResultBean<T> implements Serializable {
 		}
 	}
 	
-	public ResultBean(DescribableInfo describableInfo, Page<T> pageResult, Object object) 
+	public ResultBean(Describable describableInfo, Page<T> pageResult, Object object) 
 	{
 		this.code = describableInfo.getCode();
-		this.info = describableInfo.getInfo();
+		this.message = describableInfo.getMessage();
 		if (null != pageResult)
 		{
 			this.isPageResult = true;
@@ -80,9 +80,9 @@ public class ResultBean<T> implements Serializable {
 		this.object = object;
 	}
 	
-	private Object code;// 状态码
+	private Object code;// 描述代码
 
-	private String info;// 状态描述信息
+	private String message;// 描述信息
 
 	private Object object;// 提供内容封装
 	
@@ -112,7 +112,7 @@ public class ResultBean<T> implements Serializable {
 
 	public Object getCode()
 	{
-		return code;
+		return this.code;
 	}
 
 	public void setCode(Object code)
@@ -120,34 +120,24 @@ public class ResultBean<T> implements Serializable {
 		this.code = code;
 	}
 
-	public String getInfo()
+	public String getMessage()
 	{
-		return info;
+		return this.message;
 	}
 
-	public void setInfo(String info)
+	public void setInfo(String message)
 	{
-		this.info = info;
+		this.message = message;
 	}
 
 	public Object getObject()
 	{
-		return object;
+		return this.object;
 	}
 
 	public void setObject(Object object)
 	{
 		this.object = object;
-	}
-
-	public Boolean getIsPageResult()
-	{
-		return null==this.isPageResult ? false : this.isPageResult;
-	}
-
-	public void setIsPageResult(Boolean isPageResult)
-	{
-		this.isPageResult = isPageResult;
 	}
 
 	public List<?> getRows()

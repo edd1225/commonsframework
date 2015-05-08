@@ -1,6 +1,6 @@
 /**<p>项目名：</p>
- * <p>包名：	cn.singno.validatorDemo.constants</p>
- * <p>文件名：CommonsErrorConst.java</p>
+ * <p>包名：cn.singno.validatorDemo.constants</p>
+ * <p>文件名：DefaultDescribableEnum.java</p>
  * <p>版本信息：</p>
  * <p>日期：2014年7月24日-下午3:25:27</p>
  * Copyright (c) 2014singno公司-版权所有
@@ -8,8 +8,8 @@
 package cn.singno.commonsframework.constants;
 
 
-/**<p>名称：DefaultResultEnum.java</p>
- * <p>描述：默认结果枚举</p>
+/**<p>名称：DefaultDescribableEnum.java</p>
+ * <p>描述：默认的可描述枚举</p>
  * <pre>
  *         
  * </pre>
@@ -17,7 +17,7 @@ package cn.singno.commonsframework.constants;
  * @date 2014年7月24日 下午3:25:27
  * @version 1.0.0
  */
-public enum DefaultResultEnum implements DescribableInfo
+public enum DefaultDescribableEnum implements Describable
 {
 	// 120000-129999
 	SUCCESS(120000, "成功"),
@@ -34,13 +34,13 @@ public enum DefaultResultEnum implements DescribableInfo
 	EXISTS_EMOJI(120011,"输入的内容里存在系统不支持的字符")
 	;
 	
-	private Integer code;// 结果编码
-	private String info;// 结果信息
+	private Integer code;// 描述编码
+	private String message;// 描述信息
 
-	private DefaultResultEnum(Integer code, String info)
+	private DefaultDescribableEnum(Integer code, String message)
 	{
 		this.code = code;
-		this.info = info;
+		this.message = message;
 	}
 	
 	public Integer getCode()
@@ -48,8 +48,8 @@ public enum DefaultResultEnum implements DescribableInfo
 		return this.code;
 	}
 
-	public String getInfo()
+	public String getMessage()
 	{
-		return this.info;
+		return this.message;
 	}
 }

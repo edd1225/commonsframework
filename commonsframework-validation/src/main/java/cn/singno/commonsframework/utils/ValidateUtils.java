@@ -1,306 +1,501 @@
-/**<p>项目名：</p>
- * <p>包名：	cn.singno.validatorDemo.util</p>
- * <p>文件名：ValidateUtil.java</p>
- * <p>版本信息：</p>
- * <p>日期：2014年7月24日-下午2:21:36</p>
- * Copyright (c) 2014singno公司-版权所有
- */
 package cn.singno.commonsframework.utils;
 
-import java.util.List;
-import java.util.Set;
+import java.math.BigDecimal;
+import java.util.Locale;
 
-import javax.validation.ConstraintViolation;
-import javax.validation.Validation;
-import javax.validation.Validator;
-import javax.validation.ValidatorFactory;
-import javax.validation.spi.ValidationProvider;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.validator.GenericTypeValidator;
+import org.apache.commons.validator.GenericValidator;
+import org.apache.commons.validator.routines.CalendarValidator;
+import org.apache.oro.text.perl.Perl5Util;
 
-import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.lang3.ArrayUtils;
-import org.hibernate.validator.HibernateValidator;
+import cn.singno.commonsframework.constants.DefaultDescribableEnum;
+import cn.singno.commonsframework.constants.Describable;
+import cn.singno.commonsframework.exception.ConstraintViolationException;
 
-import cn.singno.commonsframework.constants.DefaultResultEnum;
-import cn.singno.commonsframework.exception.DescribableException;
-import cn.singno.commonsframework.exception.ValidatingException;
-
-import com.google.common.collect.Lists;
-
-
-/**<p>名称：ValidateUtil.java</p>
- * <p>描述：验证工具</p>
- * <pre>
- *         
- * </pre>
+/**
+ * <p>File：ValidateUtils.java</p>
+ * <p>Title: 参数校验工具类</p>
+ * <p>Description:</p>
+ * <p>Copyright: Copyright (c) 2015 2015-3-4 下午2:36:25</p>
+ * <p>Company: 8637.com</p>
  * @author 周光暖
- * @date 2014年7月24日 下午2:21:36
- * @version 1.0.0
+ * @version 1.0
  */
-@SuppressWarnings("all")
 public class ValidateUtils
 {
-	private static Validator validator = getValidator(HibernateValidator.class);
+	// url地址验证正则表达式
+	public static final String REGULAR_URL = "^(http|https|ftp)://([\\w-]+\\.)+[\\w-]+(/[\\w- ./?%&=]*)?$";
 
-	private static String SEPARATOR = "：";// 默认分隔符
-	
-	/**
-	 * 描述：验证对象，不通过抛出校验异常
-	 * <pre>
-	 * 异常数据格式：
-	 *     exceptionDescribable
-	 *     		code	异常代码：120002
-	 *     		message	异常描述：参数异常
-	 *     errorDetails		异常详细信息格式：参数异常[年龄不能小于18岁, 姓名不能为空, 性别不存在]
-	 * </pre>
-	 * @param beValidateBean	被验证的对象
-	 * @param groups			验证组
-	 * @throws DescribableException
-	 */
-	public static <T> void validate(T beValidateBean, Class<?>... groups) throws DescribableException
-	{
-		validate(beValidateBean, true, groups);
-	}
-	
-	/**
-	 * 描述：验证对象，不通过抛出校验异常
-	 * <pre>
-	 * 异常数据格式：
-	 *     exceptionDescribable
-	 *     		code	异常代码：120002
-	 *     		message	异常描述：参数异常
-	 *     errorDetails		异常详细信息格式：
-	 *     		hidAttribute：true		
-	 *     			参数异常[年龄不能小于18岁, 姓名不能为空, 性别不存在]
-	 *     		hidAttribute：false		
-	 *     			参数异常[age：年龄不能小于18岁, name：姓名不能为空, sex：性别不存在]
-	 * </pre>
-	 * @param needValidation	被验证的对象
-	 * @param hidAttribute		是否隐藏属性名称
-	 * @param groups			验证组
-	 * @throws DescribableException
-	 */
-	public static <T> void validate(T needValidation, boolean hidAttribute, Class<?>... groups) throws DescribableException
-	{
-		Set<ConstraintViolation<T>> constraintViolations = validator.validate(needValidation, groups);
-		List<String> messageList = getMessageListBySet(constraintViolations, hidAttribute);
-		if (CollectionUtils.isNotEmpty(messageList))
-		{
-			throw new ValidatingException(DefaultResultEnum.PARAMES_ERROR, ArrayUtils.toString(messageList));
-		}
-	}
-	
-	/**
-	 * 描述：验证对象，返回错误信息集
-	 * <pre>
-	 * 	       验证成功：[]
-	 * 	       验证失败：[年龄不能小于18岁, 姓名不能为空, 性别不存在]
-	 * </pre>
-	 * @param beValidateBean	被验证的对象
-	 * @param groups			验证组
-	 * @return
-	 */
-	public static <T> List<String> getMessageListByBean(T beValidateBean, Class<?>... groups)
-	{
-		return getMessageListByBean(beValidateBean, true, groups);
-	}
-	
-	/**
-	 * 描述：验证数据，返回错误信息集
-	 * <pre>
-	 * 	       验证成功：[]
-	 * 	       验证失败：
-	 *        hidAttribute：true		
-	 *        		[年龄不能小于18岁, 姓名不能为空, 性别不存在]
-	 *        hidAttribute：false	
-	 *        		[age：年龄不能小于18岁, name：姓名不能为空, sex：性别不存在]
-	 * </pre>
-	 * @param beValidateBean	被验证的对象
-	 * @param hidAttribute		是否隐藏属性名
-	 * @param groups			验证组
-	 * @return
-	 */
-	public static <T> List<String> getMessageListByBean(T beValidateBean, boolean hidAttribute, Class<?>... groups)
-	{
-		Set<ConstraintViolation<T>> constraintViolations = validator.validate(beValidateBean, groups);
-		return getMessageListBySet(constraintViolations, hidAttribute);
-	}
+	// IP地址验证正则表达式
+	public static final String REGULAR_IP_ADDRESS = "^(((2[0-4]\\d|25[0-5]|[01]?\\d\\d?)\\.){3}(2[0-4]\\d|25[0-5]|[01]?\\d\\d?))?$";
+
+	// 身份证验证正则表达式
+	public static final String REGULAR_ID_CARD = "^([1-9][0-9]{14}|[1-9][0-9]{17}|[1-9][0-9]{16}[x,X])?$";
+
+	// 邮政编码验证正则表达式
+	public static final String REGULAR_ZIP_CODE = "^([1-9][0-9]{5})?$";
+
+	// 电话验证正则表达式
+	public static final String REGULAR_PHONE = "^([0-9]{3,4}-[0-9]{7,8}(-[0-9]{2,6})?)?$";
+
+	// 邮箱验证正则表达式
+	public static final String REGULAR_EMIAL = "^[\\w-]+(\\.[\\w-]+)*@[\\w-]+(\\.[\\w-]+)+$";
+
+	// 手机验证正则表达式
+	// public static final String REGULAR_MOBILE = "^(1[0-9]{10})?$";
+	public static final String REGULAR_MOBILE = "^(1[3-8]+\\d{9})?$";
+
+	// 金额验证正则表达式
+	public static final String REGULAR_MONEY = "^((([1-9]{1}\\d{0,9})|([0]{1}))(\\.(\\d){1,2})?)?$";
 
 	/**
-	 * 描述：验证对象的某个属性，不通过抛出校验异常
-	 * <pre>
-	 * 异常数据格式：
-	 *     exceptionDescribable
-	 *     		code	异常代码：120002
-	 *     		message	异常描述：参数异常
-	 *     errorDetails		异常详细信息格式：
-	 *     		参数异常[年龄不能小于18岁, 姓名不能为空, 性别不存在]
-	 * </pre>
-	 * @param beValidateBean	被校验的属性所属对象
-	 * @param propertyName		被校验的属性
-	 * @param hidAttribute		是否隐藏属性名
-	 * @param groups
-	 * @throws DescribableException
+	 * 私有构造器，防止类的实例化
 	 */
-	public static <T> void validateProperty(T beValidateBean, String propertyName, Class<?>... groups) throws DescribableException
+	private ValidateUtils()
 	{
-		validateProperty(beValidateBean, propertyName, true, groups);
+		super();
 	}
-	
+
+	/*******************************************************************************/
+	/************************************ 断言方法 ************************************/
+	/*******************************************************************************/
 	/**
-	 * 描述：验证对象的某个属性，不通过抛出校验异常
-	 * <pre>
-	 * 异常数据格式：
-	 *     exceptionDescribable
-	 *     		code	异常代码：120002
-	 *     		message	异常描述：参数异常
-	 *     errorDetails		异常详细信息格式：
-	 *     		hidAttribute：true		
-	 *     			参数异常[年龄不能小于18岁, 姓名不能为空, 性别不存在]
-	 *     		hidAttribute：false		
-	 *     			参数异常[age：年龄不能小于18岁, name：姓名不能为空, sex：性别不存在]
-	 * </pre>
-	 * @param beValidateBean	被校验的属性所属对象
-	 * @param propertyName		被校验的属性
-	 * @param hidAttribute		是否隐藏属性名
-	 * @param groups
-	 * @throws DescribableException
+	 * <p>描述：断言对象不为空，否则抛出可描述异常</p>
+	 * @param obj
+	 * @param detail
 	 */
-	public static <T> void validateProperty(T beValidateBean, String propertyName, boolean hidAttribute, Class<?>... groups) throws DescribableException
+	public static void assertNotNull(Object obj, Describable describable, String detail)
 	{
-		Set<ConstraintViolation<T>> constraintViolations = validator.validateProperty(beValidateBean, propertyName, groups);
-		List<String> messageList = getMessageListBySet(constraintViolations, hidAttribute);
-		if (CollectionUtils.isNotEmpty(messageList))
+		if (null == obj)
 		{
-			throw new ValidatingException(DefaultResultEnum.PARAMES_ERROR, ArrayUtils.toString(messageList));
-		}
-	}
-	
-	/**
-	 * 描述：验证指定值是否能够为指定类的指定属性赋值，不能赋值则抛出校验异常
-	 * <pre>
-	 * 异常数据格式：
-	 *     exceptionDescribable
-	 *     		code	异常代码：120002
-	 *     		message	异常描述：参数异常
-	 *     errorDetails		异常详细信息格式：
-	 *     		hidAttribute：true	参数异常[年龄不能小于18岁, 姓名不能为空, 性别不存在]
-	 * </pre>
-	 * @param beanType			被赋值的类
-	 * @param propertyName		被赋值的属性
-	 * @param value				赋值的值
-	 * @param hidAttribute		是否隐藏属性名
-	 * @param groups
-	 * @throws DescribableException
-	 */
-	public static <T> void validateValue(Class<T> beanType, String propertyName, Object value, Class<?>... groups) throws DescribableException
-	{
-		validateValue(beanType, propertyName, value, true, groups);
-	}
-	
-	/**
-	 * 描述：验证指定值是否能够为指定类的指定属性赋值，不能赋值则抛出校验异常
-	 * <pre>
-	 * 异常数据格式：
-	 *     exceptionDescribable
-	 *     		code	异常代码：120002
-	 *     		message	异常描述：参数异常
-	 *     errorDetails		异常详细信息格式：
-	 *     		hidAttribute：true		
-	 *     			参数异常[年龄不能小于18岁, 姓名不能为空, 性别不存在]
-	 *     		hidAttribute：false		
-	 *     			参数异常[age：年龄不能小于18岁, name：姓名不能为空, sex：性别不存在]
-	 * </pre>
-	 * @param beanType			被赋值的类
-	 * @param propertyName		被赋值的属性
-	 * @param value				赋值的值
-	 * @param hidAttribute		是否隐藏属性名
-	 * @param groups
-	 * @throws DescribableException
-	 */
-	public static <T> void validateValue(Class<T> beanType, String propertyName, Object value, boolean hidAttribute, Class<?>... groups) throws DescribableException
-	{
-		Set<ConstraintViolation<T>> constraintViolations = validator.validateValue(beanType, propertyName, value, groups);
-		List<String> messageList = getMessageListBySet(constraintViolations, hidAttribute);
-		if (CollectionUtils.isNotEmpty(messageList))
-		{
-			throw new ValidatingException(DefaultResultEnum.PARAMES_ERROR, ArrayUtils.toString(messageList));
+			throw new ConstraintViolationException(describable, detail);
 		}
 	}
 	
 	
-	
-	// ======================================================================================================
-	
-	/**描述：
-	 * <pre>
-	 *     获得默认验证器	   	
-	 * </pre>
-	 * @return
+	/*******************************************************************************/
+	/************************************ 判断方法 ************************************/
+	/*******************************************************************************/
+
+	/**
+	 * 邮件地址格式验证(支持批量验证，各邮件地址用";"分隔)
+	 * 
+	 * @param value 			要检查的字符串
+	 * @return boolean 		是否为正确的电话格式
 	 */
-	private static Validator getValidator()
+	public static boolean isEmail(String value)
 	{
-		ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
-		return factory.getValidator();
+		return validate(value, REGULAR_EMIAL);
 	}
 
 	/**
-	 * 描述：
-	 * <pre>
-	 * 	   获得指定验证器
-	 * </pre>
-	 * @param providerType
+	 * 电话号码格式验证(支持批量验证，各电话号码用";"分隔)
+	 * 
+	 * @param value 			要检查的字符串
+	 * @return boolean 		是否为正确的电话格式
+	 */
+	public static boolean isTelFormat(String value)
+	{
+		return validate(value, REGULAR_PHONE);
+	}
+
+	/**
+	 * 邮政编码格式验证 6位(支持批量验证，各邮政编码用";"分隔)
+	 * 
+	 * @param value 		要检查的字符串
+	 * @return boolean 		是否正确的邮编格式
+	 */
+	public static boolean isZipCode(String value)
+	{
+		return validate(value, REGULAR_ZIP_CODE);
+	}
+
+	/**
+	 * 身份证号码格式验证 15位或18位(支持批量验证，各身份证号码用";"分隔)
+	 * 
+	 * @param value 		要检查的字符串
+	 * @return boolean 		是否正确的身份证号码格式
+	 */
+	public static boolean isIDCard(String value)
+	{
+		return validate(value, REGULAR_ID_CARD);
+	}
+
+	/**
+	 * 手机号码格式验证(支持批量验证，各手机号码用";"分隔)
+	 * 
+	 * @param value 		 要检查的字符串
+	 * @return boolean 		是否正确的手机号码格式
+	 */
+	public static boolean isMobile(String value)
+	{
+		// 正则表达式参考 @link http://my.oschina.net/william1/blog/4752
+		return validate(value, REGULAR_MOBILE);
+	}
+
+	/**
+	 * IP地址格式验证(支持批量验证，各IP地址用";"分隔)
+	 * 
+	 * @param value 		要检查的字符串
+	 * @return boolean 	是否正确的IP地址格式
+	 */
+	public static boolean isIpAddress(String value)
+	{
+		return validate(value, REGULAR_IP_ADDRESS);
+	}
+
+	/**
+	 * URL地址格式验证(支持批量验证，各URL地址用";"分隔)
+	 * @param value 		要检查的字符串
+	 * @return boolean 	是否正确的URL地址格式
+	 */
+	public static boolean isUrl(String value)
+	{
+		return validate(value, REGULAR_URL);
+	}
+
+	/**
+	 * 数值大小验证（最小约束）
+	 * @param value
+	 * @param min
 	 * @return
 	 */
-	private static Validator getValidator(Class<? extends ValidationProvider> providerType)
+	public static boolean minValue(int value, int min)
 	{
-		ValidatorFactory factory = Validation.byProvider(providerType).configure().buildValidatorFactory();
-		return factory.getValidator();
+		return GenericValidator.minValue(value, min);
+	}
+
+	public static boolean minValue(long value, long min)
+	{
+		return GenericValidator.minValue(value, min);
+	}
+
+	public static boolean minValue(double value, double min)
+	{
+		return GenericValidator.minValue(value, min);
+	}
+
+	public static boolean minValue(float value, float min)
+	{
+		return GenericValidator.minValue(value, min);
+	}
+
+	/**
+	 * 数值大小验证（最大约束）
+	 * @param value
+	 * @param max
+	 * @return
+	 */
+	public static boolean maxValue(int value, int max)
+	{
+		return GenericValidator.maxValue(value, max);
+	}
+
+	public static boolean maxValue(long value, long max)
+	{
+		return GenericValidator.maxValue(value, max);
+	}
+
+	public static boolean maxValue(double value, double max)
+	{
+		return GenericValidator.maxValue(value, max);
+	}
+
+	public static boolean maxValue(float value, float max)
+	{
+		return GenericValidator.maxValue(value, max);
 	}
 	
-	/**描述：获得错误信息集
-	 * <pre>
-	 *     根据违反的约束，获得错误消息集
-	 * </pre>
-	 * @param constraintViolations
+	/**
+	 * 数值大小验证（范围约束）
+	 * @param value
+	 * @param min
+	 * @param max
 	 * @return
 	 */
-	public static <T> List<String> getMessageListBySet(Set<ConstraintViolation<T>> constraintViolations, boolean hidAttribute)
+	public static boolean isInRange(byte value, byte min, byte max)
 	{
-		List<String> errorList = Lists.newArrayList();
-		if (CollectionUtils.isNotEmpty(constraintViolations))
+		return GenericValidator.isInRange(value, min, max);
+	}
+
+	public static boolean isInRange(int value, int min, int max)
+	{
+		return GenericValidator.isInRange(value, min, max);
+	}
+
+	public static boolean isInRange(float value, float min, float max)
+	{
+		return GenericValidator.isInRange(value, min, max);
+	}
+
+	public static boolean isInRange(short value, short min, short max)
+	{
+		return GenericValidator.isInRange(value, min, max);
+	}
+
+	public static boolean isInRange(long value, long min, long max)
+	{
+		return GenericValidator.isInRange(value, min, max);
+	}
+
+	public static boolean isInRange(double value, double min, double max)
+	{
+		return GenericValidator.isInRange(value, min, max);
+	}
+	
+	/**
+	 * 金额格式验证（范围约束）
+	 * @param price 			金额
+	 * @param min 			最小值（包含）　
+	 * @param max 			最大值（包含）　
+	 * @return
+	 */
+	public static Boolean isMoney(BigDecimal price, BigDecimal min, BigDecimal max)
+	{
+		boolean bool = true;
+		bool = (null != price);
+		if (bool)
 		{
-			for (ConstraintViolation constraintViolation : constraintViolations)
+			bool = matchRegexp(price.toString(), REGULAR_MONEY);
+		}
+		if (bool && null != min)
+		{
+			bool = (price.compareTo(min) >= 0);
+		}
+		if (bool && null != max)
+		{
+			bool = (price.compareTo(max) <=0);
+		}
+		return bool;
+	}
+	
+	/**
+	 * 非空验证
+	 * @param obj
+	 * @return
+	 */
+	public static boolean isNotNull(Object obj)
+	{
+		return !isNull(obj);
+	}
+	
+	/**
+	 * 为空验证
+	 * @param obj
+	 * @return
+	 */
+	public static boolean isNull(Object obj)
+	{
+		if (obj instanceof String)
+		{
+			return StringUtils.isBlank((String)obj);
+		}
+		else 
+		{
+			return null == obj;
+		}
+	}
+	
+	/**
+	 * 数值格式验证
+	 * @param value
+	 * @return
+	 */
+	public static boolean isByte(String value) 
+	{
+		return GenericValidator.isByte(value);
+	}
+
+	public static boolean isShort(String value)
+	{
+		return GenericValidator.isShort(value);
+	}
+
+	public static boolean isInt(String value)
+	{
+		return GenericValidator.isInt(value);
+	}
+
+	public static boolean isLong(String value)
+	{
+		return GenericValidator.isLong(value);
+	}
+
+	public static boolean isFloat(String value)
+	{
+		return GenericValidator.isFloat(value);
+	}
+
+	public static boolean isDouble(String value)
+	{
+		return GenericValidator.isDouble(value);
+	}
+	
+	/**
+	 * 日期格式验证
+	 * 
+	 * @param value 			要检查的字符串
+	 * @param datePattern 		日期格式
+	 * @param strict 			是否严格匹配
+	 * @return boolean 		是否为正确的日期及格式
+	 */
+	public static boolean isDate(String value, String datePattern, boolean strict)
+	{
+		return GenericValidator.isDate(value, datePattern, strict);
+	}
+    
+	/**
+	 * 字符串长度验证（最小约束）
+	 * @param value
+	 * @param max
+	 * @return
+	 */
+	public static boolean minLength(String value, int min) {
+		return GenericValidator.minLength(value, min);
+	}
+
+	/**
+	 * 字符串长度验证（最大约束）
+	 * @param value
+	 * @param max
+	 * @return
+	 */
+	public static boolean maxLength(String value, int max) {
+		return GenericValidator.maxLength(value, max); 
+	}
+	
+	/**
+	 *  字符串长度验证（范围约束）
+	 * @param str 			要检查的字符串
+	 * @param min 			最小长度（包含）
+	 * @param max 			最大长度（包含）
+	 * @return boolean 		是否通过验证
+	 */
+	public static boolean islengthRange(String str, int min, int max)
+	{
+		return  GenericValidator.minLength(str, min) && GenericValidator.maxLength(str, max);
+	}
+	
+	/**
+	 * 字符串存储空间验证（最小约束）
+	 * @param value
+	 * @param max
+	 * @return
+	 */
+	public static boolean minSize(String value, int min) {
+		return GenericValidator.minValue(countSize(value), min);
+	}
+
+	/**
+	 * 字符串存储空间验证（最大约束）
+	 * @param value
+	 * @param max
+	 * @return
+	 */
+	public static boolean maxSize(String value, int max) {
+		return GenericValidator.maxValue(countSize(value), max);
+	}
+	
+	/**
+	 * 字符串存储空间验证（范围约束）
+	 * @param str 			要检查的字符串
+	 * @param min 			最小长度（包含）
+	 * @param max 			最大长度（包含）
+	 * @return boolean 		是否通过验证
+	 */
+	public static boolean isSizeRange(String str, int min, int max)
+	{
+		return GenericValidator.isInRange(countSize(str), min, max);
+	}
+	
+	/**
+	 * 正则匹配
+	 * 
+	 * @param value 		待匹配的字符串
+	 * @param regexp 		正则表达式
+	 * @return boolean 	是否匹配
+	 */
+	public static boolean matchRegexp(String value, String regexp)
+	{
+		return GenericValidator.matchRegexp(value, regexp);
+	}
+	
+	/**
+	 * 批量正则匹配
+	 * 
+	 * @param values 			待匹配的字符串（多个带匹配的字符串用 ";" 分开）
+	 * @param regex 			正则表达式
+	 * @return boolean 		是否匹配
+	 */
+	public static boolean validate(String values, String regex)
+	{
+		if (StringUtils.isBlank(values) || StringUtils.isBlank(regex)) return false;
+		
+		// 全角转半角 
+		char c[] = values.toCharArray();
+		for (int i = 0; i < c.length; i++)
+		{
+			if (c[i] == '\u3000')
 			{
-				if (hidAttribute)
+				c[i] = ' ';
+			} else if (c[i] > '\uFF00' && c[i] < '\uFF5F')
+			{
+				c[i] = (char) (c[i] - 65248);
+
+			}
+		}
+		values = StringUtils.trimToEmpty(new String(c));
+		
+		if (!StringUtils.contains(values, ";"))// 单匹配
+		{
+			return matchRegexp(values, regex);
+		}
+		else// 批量匹配
+		{
+			String[] strs = values.split(";");
+			for (int i = 0; i < strs.length; i++)
+			{
+				String str = strs[i];
+				if (!matchRegexp(str, regex))
 				{
-					errorList.add(constraintViolation.getMessage());
+					return false;
 				}
-				else 
+			}
+			return true;
+		}
+	}
+	
+	// =====================================================================================
+	
+	/**
+	 * 计算字符串的存储空间（单位字节，中文为2个字节）
+	 * @param str
+	 * @return
+	 */
+	private static int countSize(String str)
+	{
+		int size = 0;
+		if (StringUtils.isBlank(str))
+		{
+			String chinese = "[\u0391-\uFFE5]";
+			/* 获取字段值的长度，如果含中文字符，则每个中文字符长度为2，否则为1 */
+			for (int i = 0; i < str.length(); i++)
+			{
+				/* 获取一个字符 */
+				String temp = str.substring(i, i + 1);
+				/* 判断是否为中文字符 */
+				if (temp.matches(chinese))
 				{
-					errorList.add(constraintViolation.getPropertyPath() + SEPARATOR + constraintViolation.getMessage());
+					/* 中文字符长度为2 */
+					size += 2;
+				} else
+				{
+					/* 其他字符长度为1 */
+					size += 1;
 				}
 			}
 		}
-		return errorList;
-	}
-	
-	public static List<String> getMessageListBySet2(Set<ConstraintViolation<?>> constraintViolations, boolean hidAttribute)
-	{
-		List<String> errorList = Lists.newArrayList();
-		if (CollectionUtils.isNotEmpty(constraintViolations))
-		{
-			for (ConstraintViolation constraintViolation : constraintViolations)
-			{
-				if (hidAttribute)
-				{
-					errorList.add(constraintViolation.getMessage());
-				}
-				else 
-				{
-					errorList.add(constraintViolation.getPropertyPath() + SEPARATOR + constraintViolation.getMessage());
-				}
-			}
-		}
-		return errorList;
+		return size;
 	}
 }

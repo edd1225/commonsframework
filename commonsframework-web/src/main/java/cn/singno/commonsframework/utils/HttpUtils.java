@@ -319,7 +319,7 @@ public class HttpUtils
     {
         String result = null;
         
-        if (CommonValidator.isMobileFormat(mobile, true, 11))
+        if (ValidateUtils.isMobile(mobile))
         {
             String url = MessageFormat.format(MOBILE_URL, mobile);
             logger.info("从以下地址获取手机号所在地区：{}", url);

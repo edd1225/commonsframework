@@ -5,7 +5,7 @@
  */
 package cn.singno.commonsframework.exception;
 
-import cn.singno.commonsframework.constants.DescribableInfo;
+import cn.singno.commonsframework.constants.Describable;
 
 /**
  * <p>File：FileUploadException.java</p>
@@ -19,11 +19,11 @@ import cn.singno.commonsframework.constants.DescribableInfo;
 @SuppressWarnings("all")
 public class FileUploadException extends DescribableException
 {
-	public FileUploadException(DescribableInfo describableInfo) {
+	public FileUploadException(Describable describableInfo) {
 		super(describableInfo);
 	}
 	
-	public FileUploadException(DescribableInfo describableInfo, String errorDetails) {
+	public FileUploadException(Describable describableInfo, String errorDetails) {
 		super(describableInfo, errorDetails);
 	}
 }

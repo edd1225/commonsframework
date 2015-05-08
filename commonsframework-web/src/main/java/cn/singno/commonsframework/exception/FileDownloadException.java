@@ -5,7 +5,7 @@
  */
 package cn.singno.commonsframework.exception;
 
-import cn.singno.commonsframework.constants.DescribableInfo;
+import cn.singno.commonsframework.constants.Describable;
 
 
 /**
@@ -20,11 +20,11 @@ import cn.singno.commonsframework.constants.DescribableInfo;
 @SuppressWarnings("all")
 public class FileDownloadException extends DescribableException
 {
-	public FileDownloadException(DescribableInfo describableInfo) {
+	public FileDownloadException(Describable describableInfo) {
 		super(describableInfo);
 	}
 	
-	public FileDownloadException(DescribableInfo describableInfo, String errorDetails) {
+	public FileDownloadException(Describable describableInfo, String errorDetails) {
 		super(describableInfo, errorDetails);
 	}
 }

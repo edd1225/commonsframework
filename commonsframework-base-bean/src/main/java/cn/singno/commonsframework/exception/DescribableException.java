@@ -1,5 +1,5 @@
 /**
- * <p>包名：	cn.singno.validatorDemo.exception</p>
+ * <p>包名：cn.singno.validatorDemo.exception</p>
  * <p>文件名：DescribableException.java</p>
  * <p>版本信息：</p>
  * <p>日期：2014年7月24日-下午2:51:22</p>
@@ -7,7 +7,7 @@
  */
 package cn.singno.commonsframework.exception;
 
-import cn.singno.commonsframework.constants.DescribableInfo;
+import cn.singno.commonsframework.constants.Describable;
 
 /**
  * <p>名称：DescribableException.java</p>
@@ -22,38 +22,38 @@ import cn.singno.commonsframework.constants.DescribableInfo;
 @SuppressWarnings("all")
 public abstract class DescribableException extends RuntimeException {
 
-	private Number code;// 编码
+	private Number code;// 描述编码
 	
-	private String Info;// 信息
+	private String message;// 描述信息
 
-	private String errorDetails;// 异常详细信息
+	private String detail;// 详细描述
 
 	/**
 	 * 构造器
 	 * 
 	 * <pre></pre>
 	 * 
-	 * @param exceptionDescribable
+	 * @param describableInfo
 	 */
-	public DescribableException(DescribableInfo describableInfo) {
+	public DescribableException(Describable describableInfo) {
 		super();
 		this.code = describableInfo.getCode();
-		this.Info = describableInfo.getInfo();
+		this.message = describableInfo.getMessage();
 	}
 
 	/**
-	 * 构造器
-	 * 
-	 * <pre></pre>
-	 * 
-	 * @param exceptionDescribable
-	 * @param errorDetails
+	 * <p>构造器：</p>
+	 * <pre>
+	 *    
+	 * </pre>
+	 * @param describableInfo
+	 * @param detail
 	 */
-	public DescribableException(DescribableInfo describableInfo, String errorDetails) {
+	public DescribableException(Describable describableInfo, String detail) {
 		super();
 		this.code = describableInfo.getCode();
-		this.Info = describableInfo.getInfo();
-		this.errorDetails = errorDetails;
+		this.message = describableInfo.getMessage();
+		this.detail = detail;
 	}
 
 	public Number getCode()
@@ -66,23 +66,23 @@ public abstract class DescribableException extends RuntimeException {
 		this.code = code;
 	}
 
-	public String getInfo()
+	public String getMessage()
 	{
-		return Info;
+		return message;
 	}
 
-	public void setInfo(String info)
+	public void setMessage(String message)
 	{
-		Info = info;
+		this.message = message;
 	}
 
-	public String getErrorDetails()
+	public String getDetail()
 	{
-		return errorDetails;
+		return this.detail;
 	}
 
-	public void setErrorDetails(String errorDetails)
+	public void setDetail(String detail)
 	{
-		this.errorDetails = errorDetails;
+		this.detail = detail;
 	}
 }

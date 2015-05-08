@@ -7,7 +7,7 @@
  */
 package cn.singno.commonsframework.exception;
 
-import cn.singno.commonsframework.constants.DescribableInfo;
+import cn.singno.commonsframework.constants.Describable;
 
 
 /**
@@ -23,11 +23,11 @@ import cn.singno.commonsframework.constants.DescribableInfo;
 @SuppressWarnings("all")
 public class BusinessException extends DescribableException
 {
-	public BusinessException(DescribableInfo describableInfo) {
+	public BusinessException(Describable describableInfo) {
 		super(describableInfo);
 	}
 	
-	public BusinessException(DescribableInfo describableInfo, String errorDetails) {
+	public BusinessException(Describable describableInfo, String errorDetails) {
 		super(describableInfo, errorDetails);
 	}
 }

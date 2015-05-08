@@ -7,7 +7,6 @@ import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.ConstraintViolation;
-import javax.validation.ConstraintViolationException;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -26,12 +25,12 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.AbstractHandlerExceptionResolver;
 
 import cn.singno.commonsframework.bean.ResultBean;
-import cn.singno.commonsframework.constants.DefaultResultEnum;
+import cn.singno.commonsframework.constants.DefaultDescribableEnum;
 import cn.singno.commonsframework.exception.BusinessException;
+import cn.singno.commonsframework.exception.ConstraintViolationException;
 import cn.singno.commonsframework.exception.DescribableException;
-import cn.singno.commonsframework.exception.ValidatingException;
+import cn.singno.commonsframework.utils.ConstraintValidateUtils;
 import cn.singno.commonsframework.utils.ExceptionUtils;
-import cn.singno.commonsframework.utils.ValidateUtils;
 
 import com.alibaba.fastjson.JSON;
 import com.google.common.collect.Lists;
@@ -188,7 +187,7 @@ public class GlobalExcaptionResolver extends AbstractHandlerExceptionResolver
 		DescribableException describableException = null;
 		if (ex instanceof UnauthorizedException)
 		{
-			describableException = new BusinessException(DefaultResultEnum.AUTHORIZED_ERROR);
+			describableException = new BusinessException(DefaultDescribableEnum.AUTHORIZED_ERROR);
 		}
 		// 属性绑定异常
 		if (ex instanceof BindException)
@@ -198,15 +197,15 @@ public class GlobalExcaptionResolver extends AbstractHandlerExceptionResolver
 			{
 				errorList.add(error.getDefaultMessage());
 			}
-			describableException = new ValidatingException(DefaultResultEnum.PARAMES_ERROR, ArrayUtils.toString(errorList));
+			describableException = new ConstraintViolationException(DefaultDescribableEnum.PARAMES_ERROR, ArrayUtils.toString(errorList));
 		} 
 		// 参数约束校验异常
-		else if (ex instanceof ConstraintViolationException)
+		else if (ex instanceof javax.validation.ConstraintViolationException)
 		{
-			ConstraintViolationException constraintViolationException = (ConstraintViolationException) ex;
+			javax.validation.ConstraintViolationException constraintViolationException = (javax.validation.ConstraintViolationException) ex;
 			Set<ConstraintViolation<?>> constraintViolations = constraintViolationException.getConstraintViolations();
-			List<String> errorList = ValidateUtils.getMessageListBySet2(constraintViolations, true);
-			describableException = new ValidatingException(DefaultResultEnum.PARAMES_ERROR, ArrayUtils.toString(errorList));
+			List<String> errorList = ConstraintValidateUtils.getMessageListBySet2(constraintViolations, true);
+			describableException = new ConstraintViolationException(DefaultDescribableEnum.PARAMES_ERROR, ArrayUtils.toString(errorList));
 		} 
 		// 非法参数异常
 		else if (ex instanceof IllegalArgumentException)
@@ -215,13 +214,13 @@ public class GlobalExcaptionResolver extends AbstractHandlerExceptionResolver
 			String message = ex.getMessage();
 			if (cn.singno.commonsframework.utils.StringUtils.isContainsChinese(message))
 			{
-				describableException = new BusinessException(DefaultResultEnum.PARAMES_ERROR, message);
+				describableException = new BusinessException(DefaultDescribableEnum.PARAMES_ERROR, message);
 			}
 		}
 		// 文件上传大小越界异常
 		else if (ex instanceof MaxUploadSizeExceededException)
 		{
-			describableException = new BusinessException(DefaultResultEnum.UPLOAD_ERROR, ex.getMessage());
+			describableException = new BusinessException(DefaultDescribableEnum.UPLOAD_ERROR, ex.getMessage());
 		}
 		// 自定义异常
 		else if (ex instanceof DescribableException)
@@ -231,8 +230,8 @@ public class GlobalExcaptionResolver extends AbstractHandlerExceptionResolver
 		
 		if (null == describableException)
 		{
-			describableException = new BusinessException(DefaultResultEnum.SYSTEM_ERROR);
+			describableException = new BusinessException(DefaultDescribableEnum.SYSTEM_ERROR);
 		}
-		return new ResultBean(describableException.getCode(), ExceptionUtils.promptInfo(describableException));
+		return new ResultBean(describableException.getCode(), ExceptionUtils.description(describableException));
 	}
 }

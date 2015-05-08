@@ -8,7 +8,7 @@
 package cn.singno.commonsframework.constants;
 
 /**<p>名称：DescribableExceptionConstants.java</p>
- * <p>描述：可描述信息</p>
+ * <p>描述：可描述抽象接口</p>
  * <pre>
  *  	
  * </pre>
@@ -16,19 +16,19 @@ package cn.singno.commonsframework.constants;
  * @date 2014年7月24日 下午3:19:12
  * @version 1.0.0
  */
-public interface DescribableInfo
+public interface Describable
 { 
 	/**
 	 * 描述：  
-	 * <pre>编码</pre>
+	 * <pre>描述编码</pre>
 	 * @return
 	 */
 	Number getCode();
 	
 	/**
 	 * 描述：
-	 * <pre>信息</pre>
+	 * <pre>描述信息</pre>
 	 * @return
 	 */
-	String getInfo();
+	String getMessage();
 }

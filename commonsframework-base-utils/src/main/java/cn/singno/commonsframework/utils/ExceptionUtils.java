@@ -20,7 +20,7 @@ public class ExceptionUtils {
 	private static String SEPARATOR = "：";// 默认分隔符
 	
 	/**
-	 * 描述：将可描述的异常转为提示信息
+	 * 描述：描述异常
 	 * 
 	 * <pre>
 	 * 提示信息格式：
@@ -30,12 +30,12 @@ public class ExceptionUtils {
 	 * @param e
 	 * @return
 	 */
-	public static String promptInfo(DescribableException e) {
-		return promptInfo(e, true);
+	public static String description(DescribableException e) {
+		return description(e, true);
 	}
 
 	/**
-	 * 描述：将可描述的异常转为提示信息
+	 * 描述：描述异常
 	 * 
 	 * <pre>
 	 * 提示信息格式：
@@ -48,21 +48,21 @@ public class ExceptionUtils {
 	 * @param e
 	 * @return
 	 */
-	public static String promptInfo(DescribableException e, boolean hidCode) {
+	public static String description(DescribableException e, boolean hidCode) {
 		StringBuffer promptInfo = new StringBuffer();
 		if (!hidCode) {
 			promptInfo.append(e.getCode() + SEPARATOR);
 		}
 		promptInfo.append(StringEscapeUtils.escapeHtml4(e.getMessage()));
-		String errorDetails = StringEscapeUtils.escapeHtml4(e.getErrorDetails());
-		if (StringUtils.isNotBlank(errorDetails)) {
-			if (!StringUtils.startsWith(errorDetails, "[")
-					&& !StringUtils.endsWith(errorDetails, "]")) {
+		String detail = StringEscapeUtils.escapeHtml4(e.getDetail());
+		if (StringUtils.isNotBlank(detail)) {
+			if (!StringUtils.startsWith(detail, "[")
+					&& !StringUtils.endsWith(detail, "]")) { 
 				promptInfo.append("[");
 			};
-			promptInfo.append(errorDetails);
-			if (!StringUtils.startsWith(errorDetails, "[")
-					&& !StringUtils.endsWith(errorDetails, "]")) {
+			promptInfo.append(detail);
+			if (!StringUtils.startsWith(detail, "[")
+					&& !StringUtils.endsWith(detail, "]")) {
 				promptInfo.append("]");
 			};
 		}

@@ -15,7 +15,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import cn.singno.commonsframework.bean.ClientParameter;
-import cn.singno.commonsframework.constants.DefaultResultEnum;
+import cn.singno.commonsframework.constants.DefaultDescribableEnum;
 import cn.singno.commonsframework.constants.DefaultSystemConst;
 import cn.singno.commonsframework.exception.BusinessException;
 
@@ -65,13 +65,13 @@ public class ParameterUtils
 				|| StringUtils.isBlank(userKey)
 				|| dataLen == null)
 		{
-			throw new BusinessException(DefaultResultEnum.NUL_ERROR);
+			throw new BusinessException(DefaultDescribableEnum.NUL_ERROR);
 		}
 		// 数据长度校验
-		int len = CommonValidator.length(data);
+		int len = cn.singno.commonsframework.utils.StringUtils.countLength(data);
 		if (dataLen.intValue() != len)
 		{
-			throw new BusinessException(DefaultResultEnum.LEN_ERROR);
+			throw new BusinessException(DefaultDescribableEnum.LEN_ERROR);
 		}
 		// 异或校验码校验
 		userDes = StringUtils.trimToEmpty(userDes);
@@ -79,19 +79,19 @@ public class ParameterUtils
 		String encrypt = getUserDes(userKey, dataLen);
 		if (!userDes.equalsIgnoreCase(encrypt))
 		{
-			throw new BusinessException(DefaultResultEnum.DES_ERROR);
+			throw new BusinessException(DefaultDescribableEnum.DES_ERROR);
 		}
 		// userkey 校验
 		if (!userKey.equals(DefaultSystemConst.USER_KEY))
 		{
-			throw new BusinessException(DefaultResultEnum.KEY_ERROR);
+			throw new BusinessException(DefaultDescribableEnum.KEY_ERROR);
 		}
 		// data 参数里是否包含emoji表情
 		for (int i = 0; i < dataLen; i++)
 		{
 			if (!NotEmojiCharacter(data.charAt(i)))
 			{
-				throw new BusinessException(DefaultResultEnum.EXISTS_EMOJI);
+				throw new BusinessException(DefaultDescribableEnum.EXISTS_EMOJI);
 			}
 		}
 	}
@@ -204,7 +204,7 @@ public class ParameterUtils
 	public static Map<String, Object> getMapFromJson(String json)
 	{
 		Map<String, Object> map = null;
-		if (!CommonValidator.isNull(json))
+		if (!ValidateUtils.isNull(json))
 		{
 			map = Maps.newHashMap();
 			JSONObject jsonObject = JSON.parseObject(json);
@@ -249,7 +249,7 @@ public class ParameterUtils
 		// String data = "keyWord:13058555555";
 		// String data = "userPassword:123456,userAccount:18069014851";
 		// String userKey = ApplicationConst.TRADE_USER_KEY;
-		int dataLen = CommonValidator.length(data);
+		int dataLen = cn.singno.commonsframework.utils.StringUtils.countLength(data);
 		String userDes = getUserDes(userKey, dataLen);
 		System.out.println("userDes：" + userDes);
 		System.out.println("data：" + data);
