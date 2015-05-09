@@ -1,8 +1,11 @@
 package cn.singno.commonsframework.utils;
 
 import java.math.BigDecimal;
+import java.util.Collection;
 import java.util.Locale;
 
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.validator.GenericTypeValidator;
 import org.apache.commons.validator.GenericValidator;
@@ -271,7 +274,7 @@ public class ValidateUtils
 	}
 	
 	/**
-	 * 非空验证
+	 * 对象非空验证
 	 * @param obj
 	 * @return
 	 */
@@ -281,7 +284,7 @@ public class ValidateUtils
 	}
 	
 	/**
-	 * 为空验证
+	 * 对象为空验证
 	 * @param obj
 	 * @return
 	 */
@@ -295,6 +298,102 @@ public class ValidateUtils
 		{
 			return null == obj;
 		}
+	}
+	
+	/**
+	 * 集合对象为空验证
+	 * @param obj 集合或数组
+	 * @return
+	 */
+	public static boolean isEmpty(Object collection)
+	{
+		if (null == collection) return true;
+		if (collection instanceof Collection)
+		{
+			return CollectionUtils.isEmpty((Collection)collection);
+		}
+		if (collection.getClass().isArray())
+		{
+			if (collection instanceof Object[])
+			{
+				return  ((Object[])collection).length == 0;
+			}
+			if (collection instanceof long[])
+			{
+				return  ((long[])collection).length == 0;
+			}
+			if (collection instanceof Long[])
+			{
+				return  ((Long[])collection).length == 0;
+			}
+			if (collection instanceof int[])
+			{
+				return  ((int[])collection).length == 0;
+			}
+			if (collection instanceof Integer[])
+			{
+				return  ((Integer[])collection).length == 0;
+			}
+			if (collection instanceof short[])
+			{
+				return  ((short[])collection).length == 0;
+			}
+			if (collection instanceof Short[])
+			{
+				return  ((Short[])collection).length == 0;
+			}
+			if (collection instanceof char[])
+			{
+				return  ((char[])collection).length == 0;
+			}
+			if (collection instanceof String[])
+			{
+				return  ((String[])collection).length == 0;
+			}
+			if (collection instanceof byte[])
+			{
+				return  ((byte[])collection).length == 0;
+			}
+			if (collection instanceof Byte[])
+			{
+				return  ((Byte[])collection).length == 0;
+			}
+			if (collection instanceof double[])
+			{
+				return  ((double[])collection).length == 0;
+			}
+			if (collection instanceof Double[])
+			{
+				return  ((Double[])collection).length == 0;
+			}
+			if (collection instanceof float[])
+			{
+				return  ((float[])collection).length == 0;
+			}
+			if (collection instanceof Float[])
+			{
+				return  ((Float[])collection).length == 0;
+			}
+			if (collection instanceof boolean[])
+			{
+				return  ((boolean[])collection).length == 0;
+			}
+			if (collection instanceof Boolean[])
+			{
+				return  ((Boolean[])collection).length == 0;
+			}
+		}
+		return false;
+	}
+	
+	/**
+	 * 集合对象非空验证
+	 * @param obj
+	 * @return
+	 */
+	public static boolean isNotEmpty(Object collection)
+	{
+		return !isEmpty(collection);
 	}
 	
 	/**

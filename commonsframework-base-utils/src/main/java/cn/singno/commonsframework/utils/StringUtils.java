@@ -1,5 +1,6 @@
 package cn.singno.commonsframework.utils;
 
+import java.io.UnsupportedEncodingException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -96,41 +97,31 @@ public class StringUtils {
 	}
 	
 	/**  
-    	 * 计算一个字符串的内容长度（一个中文等于一个字符）
+    	 * 计算一个字符串的内容长度
     	 * @param str 待计算的字符串 
     	 * @return int 字符串长度
     	 */
-	public static int countLength(String str)
+	public static int length(String str)
 	{
 		return org.apache.commons.lang.StringUtils.isBlank(str) ? 0 : str.length();
 	}
 	
 	/**
-	 * 计算一个字符串的存储空间（单位字节，一个中文等于两个字符）
-	 * @param str 		指定的字符串
-	 * @return int 			字符串长度
+	 * 计算一个字符串的存储空间（单位字节）
+	 * @param charsetName 	字符集名称
+	 * @param str 			指定的字符串
+	 * @return int 			字符数
 	 */
-	public static int countSize(String str)
+	public static int bytesLength(String str, String charsetName)
 	{
 		int size = 0;
-		if (org.apache.commons.lang.StringUtils.isBlank(str))
+		if (org.apache.commons.lang.StringUtils.isNotBlank(str))
 		{
-			String chinese = "[\u0391-\uFFE5]";
-			/* 获取字段值的长度，如果含中文字符，则每个中文字符长度为2，否则为1 */
-			for (int i = 0; i < str.length(); i++)
+			try
 			{
-				/* 获取一个字符 */
-				String temp = str.substring(i, i + 1);
-				/* 判断是否为中文字符 */
-				if (temp.matches(chinese))
-				{
-					/* 中文字符长度为2 */
-					size += 2;
-				} else
-				{
-					/* 其他字符长度为1 */
-					size += 1;
-				}
+				size = str.getBytes(charsetName).length;
+			} catch (UnsupportedEncodingException e) {
+				size = str.getBytes().length;
 			}
 		}
 		return size;

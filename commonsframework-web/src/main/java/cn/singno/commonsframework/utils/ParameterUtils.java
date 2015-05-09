@@ -68,7 +68,7 @@ public class ParameterUtils
 			throw new BusinessException(DefaultDescribableEnum.NUL_ERROR);
 		}
 		// 数据长度校验
-		int len = cn.singno.commonsframework.utils.StringUtils.countLength(data);
+		int len = cn.singno.commonsframework.utils.StringUtils.length(data);
 		if (dataLen.intValue() != len)
 		{
 			throw new BusinessException(DefaultDescribableEnum.LEN_ERROR);
@@ -249,7 +249,7 @@ public class ParameterUtils
 		// String data = "keyWord:13058555555";
 		// String data = "userPassword:123456,userAccount:18069014851";
 		// String userKey = ApplicationConst.TRADE_USER_KEY;
-		int dataLen = cn.singno.commonsframework.utils.StringUtils.countLength(data);
+		int dataLen = cn.singno.commonsframework.utils.StringUtils.length(data);
 		String userDes = getUserDes(userKey, dataLen);
 		System.out.println("userDes：" + userDes);
 		System.out.println("data：" + data);
