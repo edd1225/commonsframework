@@ -15,7 +15,6 @@ import java.util.Map;
 import javax.activation.FileTypeMap;
 import javax.activation.MimetypesFileTypeMap;
 
-import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.ObjectUtils;
@@ -31,8 +30,6 @@ import org.springframework.test.web.servlet.request.MockMultipartHttpServletRequ
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
-
-import com.google.common.collect.Maps;
 
 /**<p>名称：AbstractControllerTest.java</p>
  * <p>描述：</p>
@@ -68,9 +65,6 @@ public abstract class GenericControllerTest extends GenericTest
 	protected MockMvc mockMvc;
 	protected FileTypeMap defaultFileTypeMap = MimetypesFileTypeMap.getDefaultFileTypeMap();
 
-	private static String PARAM_SEPARATOR = "&";// 参数分隔符
-	private static String ATTRIBUTE_SEPARATOR = "=";// 属性(名、值)分隔符
-
 	@Autowired
 	private WebApplicationContext wac;
 	
@@ -98,74 +92,114 @@ public abstract class GenericControllerTest extends GenericTest
 	}
 
 	/**
-	 * 描述：模拟post请求
-	 * 
+	 * <p>描述：获得MockMultipartHttpServletRequestBuilder</p>
 	 * <pre>
-	 *    模拟post请求，并返回ResultActions
-	 *    可以通过ResultActions处理请求结果
+	 *    获得带文件上传的MockMultipartHttpServletRequestBuilder
 	 * </pre>
-	 * 
 	 * @param url
 	 * @param params
 	 *            ：Map<paramName, paramValue>
+	 * @param urlVariables		
+	 * 		url：/user/{id}		
+	 * 		1L     
 	 * @return
-	 * @throws NoSuchMethodException
-	 * @throws InvocationTargetException
-	 * @throws IllegalAccessException
 	 * @throws Exception
 	 */
-	protected ResultActions getResultActionsByPost(String url,
-			Map<String, Object> params) throws Exception
+	protected MockMultipartHttpServletRequestBuilder getMultipartRequestBuilder(String url, Map<String, Object> params, Object... urlVariables) throws Exception
 	{
-		return getResultActions(url, params, HttpMethod.POST);
-	}
-
-	/**
-	 * 描述：模拟post请求
-	 * 
-	 * <pre>
-	 *    模拟post请求，并返回ResultActions
-	 *    可以通过ResultActions处理请求结果
-	 * </pre>
-	 * 
-	 * @param url
-	 * @param urlVariables
-	 *            ：paramName1=paramValue1%paramName2=paramValue2...
-	 * @return
-	 * @throws NoSuchMethodException
-	 * @throws InvocationTargetException
-	 * @throws IllegalAccessException
-	 * @throws Exception
-	 */
-	protected ResultActions getResultActionsByPost(String url,
-			String urlVariables) throws Exception
-	{
-		return getResultActions(url, toMapParams(urlVariables), HttpMethod.POST);
+		MockMultipartHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.fileUpload(url, urlVariables);
+		setParams(requestBuilder, params);
+		return requestBuilder;
 	}
 	
 	/**
-	 * 描述：模拟post请求，带文件上传
-	 * 
+	 * <p>描述：获得MockHttpServletRequestBuilder</p>
 	 * <pre>
-	 *    模拟post请求，并返回ResultActions
+	 *    
+	 * </pre>
+	 * @param url
+	 * @param params
+	 *            ：Map<paramName, paramValue>
+	 * @param urlVariables		
+	 * 		url：/user/{id}		
+	 * 		1L     
+	 * @return
+	 */
+	protected  MockHttpServletRequestBuilder getRequestBuilder(String url, Map<String, Object> params, HttpMethod requestType, Object... urlVariables)
+	{
+		MockHttpServletRequestBuilder requestBuilder = null;
+		if (HttpMethod.GET.equals(requestType))
+		{
+			requestBuilder = MockMvcRequestBuilders.get(url, urlVariables);
+		} 
+		else if (HttpMethod.POST.equals(requestType))
+		{
+			requestBuilder = MockMvcRequestBuilders.post(url, urlVariables);
+		}
+		else if (HttpMethod.OPTIONS.equals(requestType))
+		{
+			requestBuilder = MockMvcRequestBuilders.options(url, urlVariables);
+		}
+		else if (HttpMethod.PUT.equals(requestType))
+		{
+			requestBuilder = MockMvcRequestBuilders.put(url, urlVariables);
+		}
+		else if (HttpMethod.DELETE.equals(requestType))
+		{
+			requestBuilder = MockMvcRequestBuilders.delete(url, urlVariables);
+		}
+		else 
+		{
+			requestBuilder = MockMvcRequestBuilders.post(url, urlVariables);
+		}
+		
+		setParams(requestBuilder, params);
+		requestBuilder.characterEncoding("UTF-8");
+		requestBuilder.contentType(MediaType.APPLICATION_JSON);
+		requestBuilder.contentType(MediaType.APPLICATION_XML);
+		requestBuilder.contentType(MediaType.TEXT_HTML);
+		return requestBuilder;
+	}
+	
+	/**
+	 * <p>描述：模拟请求</p>
+	 * <pre>
+	 *    模拟请求，并返回ResultActions
 	 *    可以通过ResultActions处理请求结果
 	 * </pre>
-	 * 
+	 * @param url
+	 * @param params
+	 * @param requestType
+	 * @param urlVariables
+	 * @return
+	 * @throws Exception
+	 */
+	protected ResultActions getResultActions(String url, Map<String, Object> params, HttpMethod requestType, Object... urlVariables) throws Exception
+	{
+		MockHttpServletRequestBuilder mockHttpServletRequestBuilder = getRequestBuilder(url, params, requestType, urlVariables);
+		return mockMvc.perform(mockHttpServletRequestBuilder);
+	}
+	
+	/**
+	 * <p>描述：模拟文件上传请求</p>
+	 * <pre>
+	 *    模拟文件上传请求，并返回ResultActions
+	 *    可以通过ResultActions处理请求结果
+	 * </pre>
 	 * @param url
 	 * @param params
 	 *            ：Map<paramName, paramValue>
 	 * @param files
-	 * 			    ：Map<MultipartFile paramName, List<File>>
+	 * 	         ：Map<MultipartFile paramName, List<File>>
+	 * @param urlVariables		
+	 * 		url：/user/{id}		
+	 * 		1L
 	 * @return
-	 * @throws NoSuchMethodException
-	 * @throws InvocationTargetException
-	 * @throws IllegalAccessException
 	 * @throws Exception
 	 */
-	protected ResultActions getResultActionsByPost(String url,
-			Map<String, Object> params, Map<String, List<File>> files) throws Exception
+	protected ResultActions getMultipartResultActions(String url, Map<String, Object> params, Map<String, List<File>> files, Object... urlVariables) throws Exception
 	{
-		MockMultipartHttpServletRequestBuilder requestBuilder = this.getMultipartHttpServletRequestBuilderByPost(url, params);
+		MockMultipartHttpServletRequestBuilder requestBuilder = getMultipartRequestBuilder(url, params, urlVariables);
 		if (null != files)
 		{
 			for (Map.Entry<String, List<File>> entry : files.entrySet())
@@ -189,291 +223,7 @@ public abstract class GenericControllerTest extends GenericTest
 		return mockMvc.perform(requestBuilder);
 	}
 	
-	/**
-	 * 描述：模拟post请求，带文件上传
-	 * 
-	 * <pre>
-	 *    模拟post请求，并返回ResultActions
-	 *    可以通过ResultActions处理请求结果
-	 * </pre>
-	 * 
-	 * @param url
-	 * @param urlVariables
-	 *            ：paramName1=paramValue1%paramName2=paramValue2...
-	 * @param files
-	 * 			    ：Map<MultipartFile paramName, List<File>>
-	 * @return
-	 * @throws NoSuchMethodException
-	 * @throws InvocationTargetException
-	 * @throws IllegalAccessException
-	 * @throws Exception
-	 */
-	protected ResultActions getResultActionsByPost(String url, String urlVariables, Map<String, List<File>> files) 
-			throws Exception
-	{
-		return this.getResultActionsByPost(url, toMapParams(urlVariables), files);
-	}
-
-	protected ResultActions getResultActionsByGet(String url) throws Exception
-	{
-		Map<String, String> params = Maps.newHashMap();
-		return this.getResultActionsByGet(url, params);
-	}
-	
-	/**
-	 * 描述：模拟get请求
-	 * 
-	 * <pre>
-	 *    模拟get请求，并返回ResultActions
-	 *    可以通过ResultActions处理请求结果
-	 * </pre>
-	 * 
-	 * @param url
-	 * @param param
-	 * @return
-	 * @throws NoSuchMethodException
-	 * @throws InvocationTargetException
-	 * @throws IllegalAccessException
-	 * @throws Exception
-	 */
-	protected ResultActions getResultActionsByGet(String url, Object param)
-			throws Exception
-	{
-		return getResultActions(url, toMapParams(BeanUtils.describe(param)), HttpMethod.GET);
-	}
-
-	/**
-	 * 描述：模拟get请求
-	 * 
-	 * <pre>
-	 *    模拟get请求，并返回ResultActions
-	 *    可以通过ResultActions处理请求结果
-	 * </pre>
-	 * 
-	 * @param url
-	 * @param params
-	 *            ：Map<paramName, paramValue>
-	 * @return
-	 * @throws NoSuchMethodException
-	 * @throws InvocationTargetException
-	 * @throws IllegalAccessException
-	 * @throws Exception
-	 */
-	protected ResultActions getResultActionsByGet(String url, Map<String, Object> params) throws Exception
-	{
-		return getResultActions(url, params, HttpMethod.GET);
-	}
-
-	/**
-	 * 描述：模拟get请求
-	 * 
-	 * <pre>
-	 *    模拟get请求，并返回ResultActions
-	 *    可以通过ResultActions处理请求结果
-	 * </pre>
-	 * 
-	 * @param url
-	 * @param urlVariables
-	 *            ：paramName1=paramValue1%paramName2=paramValue2...
-	 * @return
-	 * @throws NoSuchMethodException
-	 * @throws InvocationTargetException
-	 * @throws IllegalAccessException
-	 * @throws Exception
-	 */
-	protected ResultActions getResultActionsByGet(String url,
-			String urlVariables) throws Exception
-	{
-		return getResultActions(url, toMapParams(urlVariables), HttpMethod.GET);
-	}
-
-	/**
-	 * 描述：获得MockHttpServletRequestBuilder
-	 * 
-	 * <pre>
-	 * 获得get请求方式的MockHttpServletRequestBuilder
-	 * </pre>
-	 * 
-	 * @param url
-	 * @param param
-	 * @return
-	 * @throws Exception
-	 */
-	protected MockHttpServletRequestBuilder getHttpServletRequestBuilderByGet(
-			String url, Object param) throws Exception
-	{
-		return createRequestBuilder(url, toMapParams(BeanUtils.describe(param)), HttpMethod.GET);
-	}
-
-	/**
-	 * 描述：获得MockHttpServletRequestBuilder
-	 * 
-	 * <pre>
-	 * 获得get请求方式的MockHttpServletRequestBuilder
-	 * </pre>
-	 * 
-	 * @param url
-	 * @param params
-	 *            ：Map<paramName, paramValue>
-	 * @return
-	 * @throws Exception
-	 */
-	protected MockHttpServletRequestBuilder getHttpServletRequestBuilderByGet(
-			String url, Map<String, Object> params) throws Exception
-	{
-		return createRequestBuilder(url, params, HttpMethod.GET);
-	}
-
-	/**
-	 * 描述：获得MockHttpServletRequestBuilder
-	 * 
-	 * <pre>
-	 * 获得get请求方式的MockHttpServletRequestBuilder
-	 * </pre>
-	 * 
-	 * @param url
-	 * @param urlVariables
-	 *            ：paramName1=paramValue1%paramName2=paramValue2...
-	 * @return
-	 * @throws Exception
-	 */
-	protected MockHttpServletRequestBuilder getHttpServletRequestBuilderByGet(
-			String url, String urlVariables) throws Exception
-	{
-		Map<String, Object> params = toMapParams(urlVariables);
-		return createRequestBuilder(url, params, HttpMethod.GET);
-	}
-
-	/**
-	 * 描述：获得MockHttpServletRequestBuilder
-	 * 
-	 * <pre>
-	 * 获得post请求方式的MockHttpServletRequestBuilder
-	 * </pre>
-	 * 
-	 * @param url
-	 * @param param
-	 * @return
-	 * @throws Exception
-	 */
-	protected MockHttpServletRequestBuilder getHttpServletRequestBuilderByPost(
-			String url, Object param) throws Exception
-	{
-		return createRequestBuilder(url, toMapParams(BeanUtils.describe(param)), HttpMethod.POST);
-	}
-
-	/**
-	 * 描述：获得MockHttpServletRequestBuilder
-	 * 
-	 * <pre>
-	 * 获得post请求方式的MockHttpServletRequestBuilder
-	 * </pre>
-	 * 
-	 * @param url
-	 * @param params
-	 *            ：Map<paramName, paramValue>
-	 * @return
-	 * @throws Exception
-	 */
-	protected MockHttpServletRequestBuilder getHttpServletRequestBuilderByPost(
-			String url, Map<String, Object> params) throws Exception
-	{
-		return createRequestBuilder(url, params, HttpMethod.POST);
-	}
-
-	/**
-	 * 描述：获得MockHttpServletRequestBuilder
-	 * 
-	 * <pre>
-	 * 获得post请求方式的MockHttpServletRequestBuilder
-	 * </pre>
-	 * 
-	 * @param url
-	 * @param urlVariables
-	 *            ：paramName1=paramValue1%paramName2=paramValue2...
-	 * @return
-	 * @throws Exception
-	 */
-	protected MockHttpServletRequestBuilder getHttpServletRequestBuilderByPost(
-			String url, String urlVariables) throws Exception
-	{
-		Map<String, Object> params = toMapParams(urlVariables);
-		return createRequestBuilder(url, params, HttpMethod.POST);
-	}
-
-	/**
-	 * 描述：获得MockMultipartHttpServletRequestBuilder
-	 * 
-	 * <pre>
-	 * 获得带文件上传的MockMultipartHttpServletRequestBuilder
-	 * </pre>
-	 * 
-	 * @param url
-	 * @param 
-	 * @return
-	 * @throws Exception
-	 */
-	protected MockMultipartHttpServletRequestBuilder getMultipartHttpServletRequestBuilderByPost(String url, Object param) throws Exception
-	{
-		return this.getMultipartHttpServletRequestBuilderByPost(url, BeanUtils.describe(param));
-	}
-	
-	/**
-	 * 描述：获得MockMultipartHttpServletRequestBuilder
-	 * 
-	 * <pre>
-	 * 获得带文件上传的MockMultipartHttpServletRequestBuilder
-	 * </pre>
-	 * 
-	 * @param url
-	 * @param urlVariables
-	 *            ：Map<paramName, paramValue>
-	 * @return
-	 * @throws Exception
-	 */
-	protected MockMultipartHttpServletRequestBuilder getMultipartHttpServletRequestBuilderByPost(String url, Map<String, Object> params) throws Exception
-	{
-		MockMultipartHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.fileUpload(url);
-		setParams(requestBuilder, params);
-		requestBuilder.accept(MediaType.APPLICATION_JSON);
-		return requestBuilder;
-	}
-	
-	/**
-	 * 描述：获得MockMultipartHttpServletRequestBuilder
-	 * 
-	 * <pre>
-	 * 获得带文件上传的MockMultipartHttpServletRequestBuilder
-	 * </pre>
-	 * 
-	 * @param url
-	 * @param urlVariables
-	 *            ：paramName1=paramValue1%paramName2=paramValue2...
-	 * @return
-	 * @throws Exception
-	 */
-	protected MockMultipartHttpServletRequestBuilder getMultipartHttpServletRequestBuilderByPost(String url, String urlVariables) throws Exception
-	{
-		return this.getMultipartHttpServletRequestBuilderByPost(url, toMapParams(urlVariables));
-	}
-
 	// ===========================================================================================================================
-
-	private MockHttpServletRequestBuilder createRequestBuilder(String url,
-			Map<String, Object> params, HttpMethod requestType)
-	{
-		MockHttpServletRequestBuilder requestBuilder = null;
-		if (HttpMethod.POST.equals(requestType))
-		{
-			requestBuilder = MockMvcRequestBuilders.post(url);
-			setParams(requestBuilder, params);
-		} else if (HttpMethod.GET.equals(requestType))
-		{
-			requestBuilder = MockMvcRequestBuilders.get(url, toUrlVariables(params));
-		}
-		requestBuilder.accept(MediaType.APPLICATION_JSON);
-		return requestBuilder;
-	}
 
 	private void setParams(MockHttpServletRequestBuilder requestBuilder, Map<String, Object> params)
 	{
@@ -485,61 +235,5 @@ public abstract class GenericControllerTest extends GenericTest
 				requestBuilder.param(entry.getKey(), ObjectUtils.toString(obj, ""));
 			}
 		}
-	}
-
-	private ResultActions getResultActions(String url,
-			Map<String, Object> params, HttpMethod requestType)
-			throws Exception
-	{
-		return mockMvc.perform(createRequestBuilder(url, params, requestType));
-	}
-
-	private static String toUrlVariables(Map<String, Object> params)
-	{
-		StringBuilder urlVariables = new StringBuilder();
-		if (null != params)
-		{
-			for (Map.Entry<String, Object> entry : params.entrySet())
-			{
-				Object obj = entry.getValue();
-				urlVariables.append(entry.getKey().trim())
-						.append(ATTRIBUTE_SEPARATOR)
-						.append(ObjectUtils.toString(obj, "").trim()).append(PARAM_SEPARATOR);
-			}
-		}
-		if (urlVariables.length() == 0)
-		{
-			return null;
-		}
-		return urlVariables.substring(0, urlVariables.length() - 1);
-	}
-
-	private static Map<String, Object> toMapParams(String urlVariables)
-	{
-		Map<String, Object> map = Maps.newHashMap();
-		String[] params = urlVariables.split(PARAM_SEPARATOR);
-		for (String param : params)
-		{
-			String[] attribute = param.trim().split(ATTRIBUTE_SEPARATOR);
-			if (attribute.length == 2)
-			{
-				map.put(attribute[0].trim(), attribute[1].trim());
-			}
-		}
-		return map;
-	}
-	
-	private Map<String, Object> toMapParams(Object param) throws Exception
-	{
-		Map<String, Object> paramMap = Maps.newHashMap();
-		Map<String, String> map = BeanUtils.describe(param);
-		if (null != map)
-		{
-			for (Map.Entry<String, String> entry : map.entrySet())
-			{
-				paramMap.put(entry.getKey(), entry.getValue());
-			}
-		}
-		return paramMap;
 	}
 }

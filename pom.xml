@@ -7,7 +7,7 @@
 	<version>${commonsframework.version}</version>
 	<packaging>pom</packaging>
 	<url>http://commonsframework.singno.cn</url>
-	<description>整合spring + springMVC + JPA + Hibernate 的�?用web框架</description>
+	<description>整合spring + springMVC + JPA + Hibernate 的通用web框架</description>
 
 	<properties>
 		<!-- 项目版本 -->
@@ -53,7 +53,7 @@
 		<!-- <io.version>2.4</io.version> -->
 		<!-- json -->
 		<jackson.version>2.2.3</jackson.version>
-		<fastjson.version>1.2.0</fastjson.version>
+		<fastjson.version>1.2.5</fastjson.version>
 		<jackson-mapper-asl.version>1.9.9</jackson-mapper-asl.version>
 		<!-- xml -->
 		<xsream.version>1.1</xsream.version>

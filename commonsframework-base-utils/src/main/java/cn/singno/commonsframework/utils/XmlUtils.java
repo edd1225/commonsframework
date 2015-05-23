@@ -1,8 +1,3 @@
-/*
- * @(#)XmlUtils.java 2014-5-4 下午3:01:18
- * Copyright 2014 刘志坚, Inc. All rights reserved. 8637.com
- * PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
- */
 package cn.singno.commonsframework.utils;
 
 import java.io.File;

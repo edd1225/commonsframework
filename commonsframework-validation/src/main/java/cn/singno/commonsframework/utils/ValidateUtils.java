@@ -1,20 +1,12 @@
 package cn.singno.commonsframework.utils;
 
+import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
 import java.util.Collection;
-import java.util.Locale;
 
 import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.validator.GenericTypeValidator;
 import org.apache.commons.validator.GenericValidator;
-import org.apache.commons.validator.routines.CalendarValidator;
-import org.apache.oro.text.perl.Perl5Util;
-
-import cn.singno.commonsframework.constants.DefaultDescribableEnum;
-import cn.singno.commonsframework.constants.Describable;
-import cn.singno.commonsframework.exception.ConstraintViolationException;
 
 /**
  * <p>File：ValidateUtils.java</p>
@@ -59,28 +51,7 @@ public class ValidateUtils
 	{
 		super();
 	}
-
-	/*******************************************************************************/
-	/************************************ 断言方法 ************************************/
-	/*******************************************************************************/
-	/**
-	 * <p>描述：断言对象不为空，否则抛出可描述异常</p>
-	 * @param obj
-	 * @param detail
-	 */
-	public static void assertNotNull(Object obj, Describable describable, String detail)
-	{
-		if (null == obj)
-		{
-			throw new ConstraintViolationException(describable, detail);
-		}
-	}
 	
-	
-	/*******************************************************************************/
-	/************************************ 判断方法 ************************************/
-	/*******************************************************************************/
-
 	/**
 	 * 邮件地址格式验证(支持批量验证，各邮件地址用";"分隔)
 	 * 
@@ -479,33 +450,36 @@ public class ValidateUtils
 	/**
 	 * 字符串存储空间验证（最小约束）
 	 * @param value
+	 * @param charsetName	字符集
 	 * @param max
 	 * @return
 	 */
-	public static boolean minSize(String value, int min) {
-		return GenericValidator.minValue(countSize(value), min);
+	public static boolean minSize(String value, String charsetName, int min) {
+		return GenericValidator.minValue(bytesLength(value, charsetName), min);
 	}
 
 	/**
 	 * 字符串存储空间验证（最大约束）
 	 * @param value
+	 * @param charsetName	字符集
 	 * @param max
 	 * @return
 	 */
-	public static boolean maxSize(String value, int max) {
-		return GenericValidator.maxValue(countSize(value), max);
+	public static boolean maxSize(String value, String charsetName, int max) {
+		return GenericValidator.minValue(bytesLength(value, charsetName), max);
 	}
 	
 	/**
 	 * 字符串存储空间验证（范围约束）
-	 * @param str 			要检查的字符串
+	 * @param value 			要检查的字符串
+	 * @param charsetName	字符集
 	 * @param min 			最小长度（包含）
 	 * @param max 			最大长度（包含）
 	 * @return boolean 		是否通过验证
 	 */
-	public static boolean isSizeRange(String str, int min, int max)
+	public static boolean isSizeRange(String value, String charsetName, int min, int max)
 	{
-		return GenericValidator.isInRange(countSize(str), min, max);
+		return GenericValidator.isInRange(bytesLength(value, charsetName), min, max);
 	}
 	
 	/**
@@ -568,31 +542,21 @@ public class ValidateUtils
 	// =====================================================================================
 	
 	/**
-	 * 计算字符串的存储空间（单位字节，中文为2个字节）
-	 * @param str
-	 * @return
+	 * 计算一个字符串的存储空间（单位字节）
+	 * @param charsetName 	字符集名称
+	 * @param str 			指定的字符串
+	 * @return int 			字符数
 	 */
-	private static int countSize(String str)
+	public static int bytesLength(String str, String charsetName)
 	{
 		int size = 0;
-		if (StringUtils.isBlank(str))
+		if (StringUtils.isNotBlank(str))
 		{
-			String chinese = "[\u0391-\uFFE5]";
-			/* 获取字段值的长度，如果含中文字符，则每个中文字符长度为2，否则为1 */
-			for (int i = 0; i < str.length(); i++)
+			try
 			{
-				/* 获取一个字符 */
-				String temp = str.substring(i, i + 1);
-				/* 判断是否为中文字符 */
-				if (temp.matches(chinese))
-				{
-					/* 中文字符长度为2 */
-					size += 2;
-				} else
-				{
-					/* 其他字符长度为1 */
-					size += 1;
-				}
+				size = str.getBytes(charsetName).length;
+			} catch (UnsupportedEncodingException e) {
+				size = str.getBytes().length;
 			}
 		}
 		return size;

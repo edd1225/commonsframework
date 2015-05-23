@@ -23,7 +23,7 @@ public class ResultBean<T> implements Serializable {
 	public ResultBean() {
 	}
 
-	public ResultBean(Object code, String info) {
+	public ResultBean(Object code, String message) {
 		this.code = code;
 		this.message = message;
 	}

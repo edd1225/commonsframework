@@ -56,7 +56,9 @@
 		<property name="converters">
 			<set>
 				<!-- 将String转换成XSS安全的String -->
-				<bean class="cn.singno.commonsframework.converter.StringToPreventXssStringConverter" />
+				<!-- <bean class="cn.singno.commonsframework.converter.StringToPreventXssStringConverter" /> -->
+				<!-- String to Number 不能转换时，赋值null，不抛异常 -->
+				<!-- <bean class="cn.singno.commonsframework.converter.MyStringToNumberConverterFactory" /> -->
 			</set>
 		</property>
 		<!-- 格式化 -->
@@ -125,9 +127,12 @@
     <mvc:resources mapping="/static/**" location="/WEB-INF/static/"/>
     
     <!-- 全局异常处理器 -->
+    <bean id="defaultExceptionResolver" class="org.springframework.web.servlet.mvc.support.DefaultHandlerExceptionResolver">
+    	<property name="order" value="1" />
+    </bean>
     <bean id="globalExcaptionResolver" class=" cn.singno.commonsframework.exception.handler.GlobalExcaptionResolver">
     	<property name="jsonMessageConverter" ref="fastJsonHttpMessageConverter" />
-    	<property name="order" value="1"/>
+    	<property name="order" value="2"/>
     </bean>
     
     

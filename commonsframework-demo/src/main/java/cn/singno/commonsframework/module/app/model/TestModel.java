@@ -7,6 +7,7 @@
  */
 package cn.singno.commonsframework.module.app.model;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 
@@ -19,11 +20,15 @@ import java.util.Map;
  * @date 2015-4-28 上午10:53:32
  * @version 1.0.0
  */
-public class TestModel
+public class TestModel implements Serializable
 {
-	private List<String> list;
+	private List<String> list;// list = aa,bb,cc,ee
 	
-	private Map<String, String> map;
+	private Map<String, String> map;// map[key] = value
+	
+	private List<UserModel> users;// users[0].name="singno", users[0].age=11
+	
+	private UserModel user; // user.name="singno", user.age=11
 	
 	private String name;
 
@@ -55,5 +60,25 @@ public class TestModel
 	public void setMap(Map<String, String> map)
 	{
 		this.map = map;
+	}
+
+	public List<UserModel> getUsers()
+	{
+		return users;
+	}
+
+	public void setUsers(List<UserModel> users)
+	{
+		this.users = users;
+	}
+
+	public UserModel getUser()
+	{
+		return user;
+	}
+
+	public void setUser(UserModel user)
+	{
+		this.user = user;
 	}
 }

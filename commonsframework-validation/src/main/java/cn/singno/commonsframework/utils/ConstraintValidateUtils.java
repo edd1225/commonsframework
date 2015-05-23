@@ -1,6 +1,6 @@
 /**<p>项目名：</p>
- * <p>包名：	cn.singno.validatorDemo.util</p>
- * <p>文件名：ValidateUtil.java</p>
+ * <p>包名：cn.singno.validatorDemo.util</p>
+ * <p>文件名：ConstraintValidateUtils.java</p>
  * <p>版本信息：</p>
  * <p>日期：2014年7月24日-下午2:21:36</p>
  * Copyright (c) 2014singno公司-版权所有
@@ -28,7 +28,7 @@ import com.google.common.collect.Lists;
 
 
 /**
- * <p>名称：ValidateUtil.java</p>
+ * <p>名称：ConstraintValidateUtils.java</p>
  * <p>描述：约束验证工具</p>
  * <pre>
  *         
